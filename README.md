@@ -1,0 +1,1 @@
+# karaf_training
