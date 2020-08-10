@@ -1,16 +1,33 @@
 package ru.training.karaf.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "users")
 @NamedQueries({
         @NamedQuery(name = UserDO.GET_ALL, query = "SELECT u FROM UserDO AS u"),
-        @NamedQuery(name = UserDO.GET_BY_LOGIN, query = "SELECT u FROM UserDO AS u WHERE u.login = :login")
+        @NamedQuery(name = UserDO.GET_BY_LOGIN, query = "SELECT u FROM UserDO AS u WHERE u.login = :login"),
+        @NamedQuery(name = UserDO.GET_BY_ID, query = "SELECT u FROM UserDO AS u WHERE u.id = :id"),
+        @NamedQuery(name = UserDO.GET_BOOKS, query = "SELECT b.id FROM UserDO AS u join BookDO as b WHERE u.id = :id")
+
+        //@NamedQuery(name = UserDO.DELETE_BOOK, query = "DELETE BookDO FROM UserDO LEFT JOIN BookDO ON UserDO.id = :id WHERE BookDO.id = :book_id")
+
+})
+@NamedNativeQueries({
+        @NamedNativeQuery(name = UserDO.DELETE_BOOK, query = "DELETE FROM users_book WHERE userdo_id = :id AND book_id = :book_id")
 })
 public class UserDO implements User {
     public static final String GET_ALL = "Users.getAll";
     public static final String GET_BY_LOGIN = "Users.getByLogin";
+    public static final String GET_BY_ID = "Users.getById";
+    public static final String GET_BOOKS = "Users.getBooks";
+    public static final String DELETE_BOOK = "Users.deleteBook";
+
+
+
 
     @Id
     @GeneratedValue
@@ -24,14 +41,64 @@ public class UserDO implements User {
     private Integer age;
     private String address;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<BookDO> book;
+
+//    @OneToMany
+//    private List<ReviewDO> review;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private RoleDO role;
+
     @ElementCollection
     @CollectionTable(name = "user_properties",
             joinColumns = @JoinColumn(name = "user_id"))
     private Set<String> properties;
 
-    public UserDO() {
+    public List<BookDO> getBook() {
+        return book;
     }
 
+
+    public void setBook(List<BookDO> book) {
+        this.book = book;
+    }
+
+//    public List<ReviewDO> getReview() {
+//        return review;
+//    }
+//
+//    public void setReview(List<ReviewDO> review) {
+//        this.review = review;
+//    }
+
+    public UserDO(User user) {
+        this.id = user.getId();
+        this.login=user.getLogin();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+//        List<? extends Book> list= user.getBook();
+//        List<BookDO> result=new ArrayList<>();
+//        for (Book book1 : list) {
+//            result.add(new BookDO(book1));
+//        }
+//        this.book= result;
+    }
+
+
+
+    public UserDO() {
+        }
+
+    public RoleDO getRole() {
+        return role;
+    }
+
+    public void setRole(RoleDO role) {
+        this.role = role;
+    }
+
+    @Override
     public Long getId() {
         return id;
     }

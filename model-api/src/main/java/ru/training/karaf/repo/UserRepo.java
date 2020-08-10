@@ -3,6 +3,7 @@ package ru.training.karaf.repo;
 import java.util.List;
 import java.util.Optional;
 
+import ru.training.karaf.model.Book;
 import ru.training.karaf.model.User;
 
 public interface UserRepo {
@@ -14,5 +15,13 @@ public interface UserRepo {
 
     Optional<? extends User> get(String login);
 
+    Optional<? extends User> get(Long id);
+
     void delete(String login);
+
+    void addBook(Long id, Book book);
+
+    List<Long> showBooks(Long id);
+
+    void removeBook(Long id,Long bookId);
 }

@@ -1,13 +1,14 @@
 package ru.training.karaf.repo;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import org.apache.aries.jpa.template.JpaTemplate;
-import ru.training.karaf.model.User;
-import ru.training.karaf.model.UserDO;
+import ru.training.karaf.model.*;
 
 public class UserRepoImpl implements UserRepo {
     private JpaTemplate template;
@@ -30,6 +31,7 @@ public class UserRepoImpl implements UserRepo {
         userToCreate.setAddress(user.getAddress());
         userToCreate.setAge(user.getAge());
         userToCreate.setProperties(user.getProperties());
+        userToCreate.setRole(new RoleDO(user.getRole()));
         template.tx(em -> em.persist(userToCreate));
     }
 
@@ -43,6 +45,7 @@ public class UserRepoImpl implements UserRepo {
                 userToUpdate.setAddress(user.getAddress());
                 userToUpdate.setAge(user.getAge());
                 userToUpdate.setProperties(user.getProperties());
+                userToUpdate.setRole(new RoleDO(user.getRole()));
                 em.merge(userToUpdate);
             });
         });
@@ -54,8 +57,35 @@ public class UserRepoImpl implements UserRepo {
     }
 
     @Override
+    public Optional<? extends User> get(Long id) {
+        return template.txExpr(em -> getById(id, em));
+    }
+
+    @Override
     public void delete(String login) {
         template.tx(em -> getByLogin(login, em).ifPresent(em::remove));
+    }
+
+    @Override
+    public void addBook(Long id, Book book) {
+        template.tx(em -> {
+            getById(id, em).ifPresent(userToUpdate -> {
+                userToUpdate.getBook().add(new BookDO(book));
+                em.merge(userToUpdate);
+            });
+        });
+    }
+
+    @Override
+    public List<Long> showBooks(Long id) {
+        return template.txExpr(em -> getBooks(id, em));
+    }
+
+    @Override
+    public void removeBook(Long id, Long bookId) {
+        template.tx(em -> {
+            removeBook(id, bookId, em);
+        });
     }
 
     private Optional<UserDO> getByLogin(String login, EntityManager em) {
@@ -64,6 +94,30 @@ public class UserRepoImpl implements UserRepo {
                     .getSingleResult());
         } catch (NoResultException e) {
             return Optional.empty();
+        }
+    }
+
+    private void removeBook(Long id, Long bookId, EntityManager em) {
+        try {
+            em.createNamedQuery(UserDO.DELETE_BOOK).setParameter("id", id).setParameter("book_id", bookId).getFirstResult();
+        } catch (NoResultException e) {
+        }
+    }
+
+    private Optional<UserDO> getById(Long id, EntityManager em) {
+        try {
+            return Optional.of(em.createNamedQuery(UserDO.GET_BY_ID, UserDO.class).setParameter("id", id)
+                    .getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    private List<Long> getBooks(Long id, EntityManager em) {
+        try {
+            return em.createNamedQuery(UserDO.GET_BOOKS, Long.class).setParameter("id", id).getResultList();
+        } catch (NoResultException e) {
+            return Collections.emptyList();
         }
     }
 }

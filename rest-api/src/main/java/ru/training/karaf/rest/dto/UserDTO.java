@@ -1,28 +1,60 @@
 package ru.training.karaf.rest.dto;
-
+import java.util.List;
 import java.util.Set;
-
 import ru.training.karaf.model.User;
 
 public class UserDTO implements User {
 
+    private Long id;
     private String login;
     private String firstName;
     private String lastName;
     private Integer age;
     private String address;
     private Set<String> properties;
+    private List<BookDTO> book;
+    private RoleDTO role;
 
-    public UserDTO() {}
-    
+    public UserDTO() {
+    }
+
+
     public UserDTO(User user) {
+        id = user.getId();
         login = user.getLogin();
         firstName = user.getFirstName();
         lastName = user.getLastName();
         age = user.getAge();
         address = user.getAddress();
         properties = user.getProperties();
+
+
     }
+
+
+
+    public RoleDTO getRole() {
+        return role;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setRole(RoleDTO role) {
+        this.role = role;
+    }
+
+    public List<BookDTO> getBook() {
+        return book;
+    }
+
+    public void setBook(List<BookDTO> book) {
+        this.book = book;
+    }
+
+
 
     public String getLogin() {
         return login;
@@ -87,43 +119,58 @@ public class UserDTO implements User {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         UserDTO other = (UserDTO) obj;
         if (address == null) {
-            if (other.address != null)
+            if (other.address != null) {
                 return false;
-        } else if (!address.equals(other.address))
+            }
+        } else if (!address.equals(other.address)) {
             return false;
+        }
         if (age == null) {
-            if (other.age != null)
+            if (other.age != null) {
                 return false;
-        } else if (!age.equals(other.age))
+            }
+        } else if (!age.equals(other.age)) {
             return false;
+        }
         if (firstName == null) {
-            if (other.firstName != null)
+            if (other.firstName != null) {
                 return false;
-        } else if (!firstName.equals(other.firstName))
+            }
+        } else if (!firstName.equals(other.firstName)) {
             return false;
+        }
         if (lastName == null) {
-            if (other.lastName != null)
+            if (other.lastName != null) {
                 return false;
-        } else if (!lastName.equals(other.lastName))
+            }
+        } else if (!lastName.equals(other.lastName)) {
             return false;
+        }
         if (login == null) {
-            if (other.login != null)
+            if (other.login != null) {
                 return false;
-        } else if (!login.equals(other.login))
+            }
+        } else if (!login.equals(other.login)) {
             return false;
+        }
         if (properties == null) {
-            if (other.properties != null)
+            if (other.properties != null) {
                 return false;
-        } else if (!properties.equals(other.properties))
+            }
+        } else if (!properties.equals(other.properties)) {
             return false;
+        }
         return true;
     }
 

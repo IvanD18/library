@@ -1,22 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns = "http://www.osgi.org/xmlns/blueprint/v1.0.0"
-           xmlns:jaxrs = "http://cxf.apache.org/blueprint/jaxrs"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
 >
 
-    <reference id = "userRepo" interface = "ru.training.karaf.repo.UserRepo"/>
+    <reference id="userRepo" interface="ru.training.karaf.repo.UserRepo"/>
+    <reference id="roleRepo" interface="ru.training.karaf.repo.RoleRepo"/>
+    <reference id="bookRepo" interface="ru.training.karaf.repo.BookRepo"/>
+    <reference id="authorRepo" interface="ru.training.karaf.repo.AuthorRepo"/>
+    <reference id="reviewRepo" interface="ru.training.karaf.repo.ReviewRepo"/>
 
-    <bean id = "userRestServiceBean" class = "ru.training.karaf.rest.UserRestServiceImpl">
-        <property name = "repo" ref = "userRepo"/>
+    <bean id="userRestServiceBean" class="ru.training.karaf.rest.UserRestServiceImpl">
+        <property name="bookRepo" ref="bookRepo"/>
+        <property name="repo" ref="userRepo"/>
+        <property name="roleRepo" ref="roleRepo"/>
     </bean>
 
+
+    <bean id="bookRestServiceBean" class="ru.training.karaf.rest.BookRestServiceImpl">
+        <argument ref="bookRepo"/>
+        <argument ref="authorRepo"/>
+        <argument ref="reviewRepo"/>
+    </bean>
+
+    <bean id="authorRestServiceBean" class="ru.training.karaf.rest.AuthorRestServiceImpl">
+        <argument ref="authorRepo"/>
+        <argument ref="bookRepo"/>
+    </bean>
+
+
+    <bean id="roleRestServiceBean" class="ru.training.karaf.rest.RoleRestServiceImpl">
+        <argument ref="roleRepo"/>
+        <argument ref="userRepo"/>
+    </bean>
+
+    <bean id="reviewRestServiceBean" class="ru.training.karaf.rest.ReviewRestServiceImpl">
+        <argument ref="reviewRepo"/>
+        <argument ref="userRepo"/>
+        <argument ref="bookRepo"/>
+    </bean>
+
+
     <!-- CXF -->
-    <jaxrs:server id = "restServer" address = "/rest">
+    <jaxrs:server id="restServer" address="/rest">
         <jaxrs:serviceBeans>
-            <ref component-id = "userRestServiceBean"/>
+            <ref component-id="userRestServiceBean"/>
+            <ref component-id="roleRestServiceBean"/>
+            <ref component-id="bookRestServiceBean"/>
+            <ref component-id="authorRestServiceBean"/>
+            <ref component-id="reviewRestServiceBean"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-            <bean class = "com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
-            <bean class = "org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper"/>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
+            <bean class="org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper"/>
         </jaxrs:providers>
     </jaxrs:server>
 </blueprint>

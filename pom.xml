@@ -64,6 +64,13 @@
                 <type>xml</type>
             </dependency>
             <dependency>
+                <groupId>jakarta.activation</groupId>
+                <artifactId>jakarta.activation-api</artifactId>
+                <version>1.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>org.apache.karaf.features</groupId>
                 <artifactId>enterprise</artifactId>
                 <version>4.0.8</version>

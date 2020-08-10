@@ -7,7 +7,7 @@
   </parent>
   <artifactId>model-api</artifactId>
   <packaging>bundle</packaging>
-  
+
   <build>
         <plugins>
             <plugin>
