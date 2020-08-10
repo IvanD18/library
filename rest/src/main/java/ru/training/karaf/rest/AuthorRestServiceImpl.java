@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuthorRestServiceImpl implements AuthorRestService {
     AuthorRepo repo;
@@ -24,7 +25,8 @@ public class AuthorRestServiceImpl implements AuthorRestService {
 
     @Override
     public List<AuthorDTO> getAll() {
-        return null;
+        List<AuthorDTO> result = repo.getAll().stream().map(a -> new AuthorDTO(a)).collect(Collectors.toList());
+        return result;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class AuthorRestServiceImpl implements AuthorRestService {
 
     @Override
     public AuthorDTO get(String name, String surname) {
-        return repo.get(name,surname).map(u -> new AuthorDTO(u))
+        return repo.get(name, surname).map(u -> new AuthorDTO(u))
                 .orElseThrow(() -> new NotFoundException(Response.status(Response.Status.NOT_FOUND)
                         .type(MediaType.APPLICATION_JSON_TYPE).entity("Author not found").build()));
     }

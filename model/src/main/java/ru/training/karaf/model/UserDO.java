@@ -11,13 +11,17 @@ import javax.persistence.*;
         @NamedQuery(name = UserDO.GET_ALL, query = "SELECT u FROM UserDO AS u"),
         @NamedQuery(name = UserDO.GET_BY_LOGIN, query = "SELECT u FROM UserDO AS u WHERE u.login = :login"),
         @NamedQuery(name = UserDO.GET_BY_ID, query = "SELECT u FROM UserDO AS u WHERE u.id = :id"),
-        @NamedQuery(name = UserDO.GET_BOOKS, query = "SELECT b.id FROM UserDO AS u join BookDO as b WHERE u.id = :id")
+        //@NamedQuery(name = UserDO.GET_BOOKS, query = "SELECT b.id FROM UserDO AS u join BookDO as b WHERE u.id = :id")
 
         //@NamedQuery(name = UserDO.DELETE_BOOK, query = "DELETE BookDO FROM UserDO LEFT JOIN BookDO ON UserDO.id = :id WHERE BookDO.id = :book_id")
 
 })
 @NamedNativeQueries({
-        @NamedNativeQuery(name = UserDO.DELETE_BOOK, query = "DELETE FROM users_book WHERE userdo_id = :id AND book_id = :book_id")
+        @NamedNativeQuery(name = UserDO.DELETE_BOOK, query = "DELETE FROM users_book WHERE userdo_id = :id AND book_id = :book_id"),
+        @NamedNativeQuery(name = UserDO.GET_ROLES, query = "select r.id from role as r where r.id in (select u.role_id from " +
+                "users as u where u.id = ?)"),
+        @NamedNativeQuery(name = UserDO.GET_BOOKS, query = "select b.id from book as b where b.id in (select ub.book_id from " +
+                "users_book as ub where userdo_id = ?)")
 })
 public class UserDO implements User {
     public static final String GET_ALL = "Users.getAll";
@@ -25,6 +29,7 @@ public class UserDO implements User {
     public static final String GET_BY_ID = "Users.getById";
     public static final String GET_BOOKS = "Users.getBooks";
     public static final String DELETE_BOOK = "Users.deleteBook";
+    public static final String GET_ROLES = "Users.getRoles";
 
 
 

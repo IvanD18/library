@@ -14,17 +14,16 @@ public class BookRepoImpl implements BookRepo {
         this.template = template;
     }
 
-
-//    public void addAuthor(Long id, AuthorDO author) {
-//        template.tx(em -> {
-//            getById(id, em).ifPresent(bookToAdd -> {
-//                List<AuthorDO> newList = bookToAdd.getAuthor();
-//                newList.add(author);
-//                bookToAdd.setAuthor(newList);
-//                em.merge(bookToAdd);
-//            });
-//        });
-//    }
+    //    public void addAuthor(Long id, AuthorDO author) {
+    //        template.tx(em -> {
+    //            getById(id, em).ifPresent(bookToAdd -> {
+    //                List<AuthorDO> newList = bookToAdd.getAuthor();
+    //                newList.add(author);
+    //                bookToAdd.setAuthor(newList);
+    //                em.merge(bookToAdd);
+    //            });
+    //        });
+    //    }
     public void addReview(Long id, ReviewDO review) {
         template.tx(em -> {
             getById(id, em).ifPresent(bookToAdd -> {
@@ -34,8 +33,21 @@ public class BookRepoImpl implements BookRepo {
     }
 
     @Override
-    public List<Long> getAll() {
-        return template.txExpr(em -> em.createNamedQuery(BookDO.GET_ALL, Long.class).getResultList());
+    public List<AuthorDO> getAuthors(Long id) {
+        return template.txExpr(em -> getAuthors(id, em));
+    }
+
+    public List<AuthorDO> getAuthors(Long id, EntityManager em) {
+        try {
+            return em.createNamedQuery(BookDO.GET_AUTHORS).setParameter(1,id).getResultList();
+        } catch (NoResultException e) {
+            return Collections.EMPTY_LIST;
+        }
+    }
+
+    @Override
+    public List<BookDO> getAll() {
+        return template.txExpr(em -> em.createNamedQuery(BookDO.GET_ALL, BookDO.class).getResultList());
     }
 
     @Override
@@ -132,5 +144,4 @@ public class BookRepoImpl implements BookRepo {
             return Collections.emptyList();
         }
     }
-
 }

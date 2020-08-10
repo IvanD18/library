@@ -23,5 +23,7 @@ public interface UserRepo {
 
     List<Long> showBooks(Long id);
 
+    Long showRole(Long id);
+
     void removeBook(Long id,Long bookId);
 }

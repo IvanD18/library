@@ -62,11 +62,11 @@ public class AuthorDO implements Author {
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
     public String getLastName() {
-        return null;
+        return lastName;
     }
 }

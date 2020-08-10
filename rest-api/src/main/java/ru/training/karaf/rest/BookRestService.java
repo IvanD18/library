@@ -14,7 +14,7 @@ import java.util.List;
 public interface BookRestService {
 
     @GET
-    List<Long> getAll();
+    List<BookDTO> getAll();
 
     @POST
     void create(BookDTO book);

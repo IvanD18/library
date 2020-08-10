@@ -31,7 +31,7 @@ public class ReviewDO implements Review {
 
     @Override
     public Long getId() {
-        return null;
+        return id;
     }
 
     @Override

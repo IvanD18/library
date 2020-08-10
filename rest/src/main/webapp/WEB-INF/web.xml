@@ -15,15 +15,15 @@
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
-    <filter>
-        <filter-name>securityFilter</filter-name>
-        <filter-class>org.apache.shiro.web.servlet.IniShiroFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>securityFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-    </filter-mapping>
+<!--    <filter>-->
+<!--        <filter-name>securityFilter</filter-name>-->
+<!--        <filter-class>org.apache.shiro.web.servlet.IniShiroFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>securityFilter</filter-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--        <dispatcher>REQUEST</dispatcher>-->
+<!--        <dispatcher>FORWARD</dispatcher>-->
+<!--        <dispatcher>INCLUDE</dispatcher>-->
+<!--    </filter-mapping>-->
 </web-app>

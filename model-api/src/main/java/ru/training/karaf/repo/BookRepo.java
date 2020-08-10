@@ -10,7 +10,9 @@ import java.util.Optional;
 
 public interface BookRepo {
 
-    List<Long> getAll();
+    List<? extends Author> getAuthors(Long id);
+
+    List<? extends Book> getAll();
 
     void create(Book book);
 

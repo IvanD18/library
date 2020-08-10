@@ -1,6 +1,5 @@
 package ru.training.karaf.repo;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -82,6 +81,11 @@ public class UserRepoImpl implements UserRepo {
     }
 
     @Override
+    public Long showRole(Long id) {
+        return template.txExpr(em -> getRole(id, em));
+    }
+
+    @Override
     public void removeBook(Long id, Long bookId) {
         template.tx(em -> {
             removeBook(id, bookId, em);
@@ -115,9 +119,17 @@ public class UserRepoImpl implements UserRepo {
 
     private List<Long> getBooks(Long id, EntityManager em) {
         try {
-            return em.createNamedQuery(UserDO.GET_BOOKS, Long.class).setParameter("id", id).getResultList();
+            return em.createNamedQuery(UserDO.GET_BOOKS,Long.class).setParameter(1, id).getResultList();
         } catch (NoResultException e) {
             return Collections.emptyList();
+        }
+    }
+
+    private long getRole(Long id, EntityManager em) {
+        try {
+            return em.createNamedQuery(UserDO.GET_ROLES,Long.class).setParameter(1, id).getResultList().get(0);
+        } catch (NoResultException e) {
+            return Long.MIN_VALUE;
         }
     }
 }

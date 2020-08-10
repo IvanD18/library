@@ -6,23 +6,20 @@ import java.util.List;
 @Entity
 @Table(name = "book")
 @NamedQueries({
-        //@NamedQuery(name = BookDO.GET_ALL, query = "SELECT u FROM BookDO AS u"),
+        @NamedQuery(name = BookDO.GET_ALL, query = "SELECT u FROM BookDO AS u"),
         @NamedQuery(name = BookDO.GET_BY_ID, query = "SELECT u FROM BookDO AS u WHERE u.id = :id"),
         @NamedQuery(name = BookDO.SHOW_COMMENTS, query = "SELECT r.comment FROM BookDO AS b join ReviewDO as r WHERE b.id = :id"),
         @NamedQuery(name = BookDO.AVERAGE_RATING, query = "SELECT AVG(r.rating) FROM BookDO AS b join ReviewDO as r WHERE b.id = :id"),
-        @NamedQuery(name = BookDO.SEARCH_BY_TITLE, query = "SELECT b FROM BookDO AS b WHERE b.title = :title")
+        @NamedQuery(name = BookDO.SEARCH_BY_TITLE, query = "SELECT b FROM BookDO AS b WHERE b.title = :title"),
+        //@NamedQuery(name = BookDO.GET_AUTHORS, query = "SELECT a FROM BookDO AS b JOIN AuthorDO AS a WHERE b.id = :id")
 })
-//@NamedNativeQueries(
-//        {
-//                @NamedNativeQuery(name = BookDO.GET_ALL, query = " SELECT title, genre, availability, author_surname, author_name " +
-//                        " FROM book " +
-//                        " INNER JOIN book_author on book.id = bookdo_id " +
-//                        " INNER JOIN author on author.id = author_id ")
-//        }
-//)
+
 @NamedNativeQueries(
         {
-                @NamedNativeQuery(name = BookDO.GET_ALL, query = "select bookdo_id, author_id from book_author order by bookdo_id")
+                @NamedNativeQuery(name = BookDO.GET_AUTHORS, query = "select a.* from author as a where a.id in (select ba.author_id from " +
+                        "book_author" +
+                        " as ba  " +
+                        " where ba.bookdo_id = ?)", resultClass = AuthorDO.class)
         }
 )
 public class BookDO implements Book {
@@ -32,6 +29,7 @@ public class BookDO implements Book {
     public static final String SHOW_COMMENTS = "Book.showComments";
     public static final String AVERAGE_RATING = "Book.averageRating";
     public static final String SEARCH_BY_TITLE = "Book.searchByAuthor";
+    public static final String GET_AUTHORS = "Book.getAuthors";
 
     @Id
     @GeneratedValue
@@ -46,8 +44,8 @@ public class BookDO implements Book {
 
     private boolean availability;
 
-//    @OneToMany
-//    private List<ReviewDO> review;
+    //    @OneToMany
+    //    private List<ReviewDO> review;
 
     public BookDO(Book book) {
         this.id = book.getId();
@@ -84,9 +82,9 @@ public class BookDO implements Book {
         this.availability = availability;
     }
 
-//    public void setReview(List<ReviewDO> review) {
-//        this.review = review;
-//    }
+    //    public void setReview(List<ReviewDO> review) {
+    //        this.review = review;
+    //    }
 
     //    public void setUser(UserDO user) {
     //        this.user = user;
@@ -107,9 +105,6 @@ public class BookDO implements Book {
         return genre;
     }
 
-
-
-
     public List<AuthorDO> getAuthor() {
         return author;
     }
@@ -119,7 +114,7 @@ public class BookDO implements Book {
         return availability;
     }
 
-//    public List<ReviewDO> getReview() {
-//        return review;
-//    }
+    //    public List<ReviewDO> getReview() {
+    //        return review;
+    //    }
 }

@@ -5,9 +5,11 @@ import ru.training.karaf.repo.ReviewRepo;
 import ru.training.karaf.repo.UserRepo;
 import ru.training.karaf.rest.dto.BookDTO;
 import ru.training.karaf.rest.dto.ReviewDTO;
+import ru.training.karaf.rest.dto.RoleDTO;
 import ru.training.karaf.rest.dto.UserDTO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReviewRestServiceImpl implements ReviewRestService {
     ReviewRepo repo;
@@ -22,7 +24,8 @@ public class ReviewRestServiceImpl implements ReviewRestService {
 
     @Override
     public List<ReviewDTO> getAll() {
-        return null;
+        List<ReviewDTO> result = repo.getAll().stream().map(r -> new ReviewDTO(r)).collect(Collectors.toList());
+        return result;
     }
 
     @Override

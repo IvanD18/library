@@ -12,6 +12,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BookRestServiceImpl implements BookRestService {
@@ -26,10 +27,29 @@ public class BookRestServiceImpl implements BookRestService {
     }
 
     @Override
-    public List<Long> getAll() {
-        List<BookDTO> a= new ArrayList<>();
-        List<Long> list = repo.getAll();
-        return list;
+    public List<BookDTO> getAll() {
+        int i = 0;
+        long id = 0;
+        String name,lastName;
+        List<BookDTO> a = new ArrayList<>();
+        List<? extends Book> list = repo.getAll();
+
+        for (Book book : list) {
+            a.add(new BookDTO(book));
+            id = a.get(i).getId();
+            List<? extends Author> list2 = repo.getAuthors(id);
+            List<AuthorDTO> b = new ArrayList<>();
+            for (Author author : list2) {
+                name = author.getName();
+                lastName = author.getLastName();
+
+                b.add(new AuthorDTO(name, lastName, author.getId()));
+            }
+
+            a.get(i).setAuthor(b);
+            i++;
+        }
+        return a;
     }
 
     @Override

@@ -3,6 +3,7 @@ package ru.training.karaf.rest;
 import ru.training.karaf.repo.RoleRepo;
 
 import ru.training.karaf.repo.UserRepo;
+import ru.training.karaf.rest.dto.AuthorDTO;
 import ru.training.karaf.rest.dto.BookDTO;
 import ru.training.karaf.rest.dto.RoleDTO;
 import ru.training.karaf.rest.dto.UserDTO;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoleRestServiceImpl implements RoleRestService {
 
@@ -26,7 +28,8 @@ public class RoleRestServiceImpl implements RoleRestService {
 
     @Override
     public List<RoleDTO> getAll() {
-        return null;
+        List<RoleDTO> result = repo.getAll().stream().map(r -> new RoleDTO(r)).collect(Collectors.toList());
+        return result;
     }
 
     @Override
