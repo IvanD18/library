@@ -5,15 +5,18 @@ import ru.training.karaf.model.Review;
 import ru.training.karaf.model.User;
 
 public class ReviewDTO implements Review {
-
+    private long id;
     private int rating;
     private String comment;
     private UserDTO user;
     private BookDTO book;
 
     public ReviewDTO(Review review) {
+        this.id=review.getId();
         this.rating = review.getRating();
         this.comment = review.getComment();
+        this.book=new BookDTO(review.getBook());
+        this.user=new UserDTO(review.getUser());
     }
 
     public ReviewDTO(int rating, String comment, UserDTO user, BookDTO book) {

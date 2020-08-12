@@ -1,6 +1,10 @@
 package ru.training.karaf.rest.dto;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import ru.training.karaf.model.Author;
+import ru.training.karaf.model.Book;
 import ru.training.karaf.model.User;
 
 public class UserDTO implements User {
@@ -27,8 +31,13 @@ public class UserDTO implements User {
         age = user.getAge();
         address = user.getAddress();
         properties = user.getProperties();
-
-
+        List<? extends Book> list = user.getBook();
+        List<BookDTO> res = new ArrayList<>();
+        for (Book book : list) {
+            res.add(new BookDTO(book));
+        }
+        this.book = res;
+        this.role = new RoleDTO(user.getRole());
     }
 
 

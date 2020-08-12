@@ -7,6 +7,7 @@ import ru.training.karaf.repo.BookRepo;
 import ru.training.karaf.repo.ReviewRepo;
 import ru.training.karaf.rest.dto.AuthorDTO;
 import ru.training.karaf.rest.dto.BookDTO;
+import ru.training.karaf.rest.dto.ReviewDTO;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BookRestServiceImpl implements BookRestService {
     BookRepo repo;
@@ -28,28 +30,29 @@ public class BookRestServiceImpl implements BookRestService {
 
     @Override
     public List<BookDTO> getAll() {
-        int i = 0;
-        long id = 0;
-        String name,lastName;
-        List<BookDTO> a = new ArrayList<>();
-        List<? extends Book> list = repo.getAll();
-
-        for (Book book : list) {
-            a.add(new BookDTO(book));
-            id = a.get(i).getId();
-            List<? extends Author> list2 = repo.getAuthors(id);
-            List<AuthorDTO> b = new ArrayList<>();
-            for (Author author : list2) {
-                name = author.getName();
-                lastName = author.getLastName();
-
-                b.add(new AuthorDTO(name, lastName, author.getId()));
-            }
-
-            a.get(i).setAuthor(b);
-            i++;
-        }
-        return a;
+//        int i = 0;
+//        long id = 0;
+//        String name,lastName;
+//        List<BookDTO> a = new ArrayList<>();
+//        List<? extends Book> list = repo.getAll();
+//
+//        for (Book book : list) {
+//            a.add(new BookDTO(book));
+//            id = a.get(i).getId();
+//            List<? extends Author> list2 = repo.getAuthors(id);
+//            List<AuthorDTO> b = new ArrayList<>();
+//            for (Author author : list2) {
+//                name = author.getName();
+//                lastName = author.getLastName();
+//
+//                b.add(new AuthorDTO(name, lastName, author.getId()));
+//            }
+//
+//            a.get(i).setAuthor(b);
+//            i++;
+//        }
+        List<BookDTO> result = repo.getAll().stream().map(b -> new BookDTO(b)).collect(Collectors.toList());
+        return result;
     }
 
     @Override

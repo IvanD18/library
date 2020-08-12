@@ -51,21 +51,22 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public List<UserDTO> getAll() {
-        int i = 0;
-
+//        int i = 0;
+//
+//        List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
+//        for (UserDTO userDTO : result) {
+//            long id = result.get(i).getId();
+//            List<Long> listBookId = repo.showBooks(result.get(i).getId());
+//            long roleId = repo.showRole(id);
+//            List<BookDTO> resultList = new ArrayList<>();
+//            for (Long aLong : listBookId) {
+//                resultList.add(new BookDTO(bookRepo.get(aLong).get()));
+//            }
+//            userDTO.setBook(resultList);
+//            userDTO.setRole(new RoleDTO(roleRepo.get(roleId).get()));
+//            i++;
+//        }
         List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
-        for (UserDTO userDTO : result) {
-            long id = result.get(i).getId();
-            List<Long> listBookId = repo.showBooks(result.get(i).getId());
-            long roleId = repo.showRole(id);
-            List<BookDTO> resultList = new ArrayList<>();
-            for (Long aLong : listBookId) {
-                resultList.add(new BookDTO(bookRepo.get(aLong).get()));
-            }
-            userDTO.setBook(resultList);
-            userDTO.setRole(new RoleDTO(roleRepo.get(roleId).get()));
-            i++;
-        }
 
         return result;
     }

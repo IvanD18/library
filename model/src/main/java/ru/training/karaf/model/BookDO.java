@@ -35,6 +35,11 @@ public class BookDO implements Book {
     @GeneratedValue
     private Long id;
 
+
+
+    @Column(columnDefinition = "oid")
+    private Long cover;
+
     private String title;
 
     private String genre;
@@ -44,8 +49,14 @@ public class BookDO implements Book {
 
     private boolean availability;
 
-    //    @OneToMany
-    //    private List<ReviewDO> review;
+
+    public Long getCover() {
+        return cover;
+    }
+
+    public void setCover(Long cover) {
+        this.cover = cover;
+    }
 
     public BookDO(Book book) {
         this.id = book.getId();

@@ -3,6 +3,7 @@ package ru.training.karaf.rest.dto;
 import ru.training.karaf.model.Author;
 import ru.training.karaf.model.Book;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,19 +22,25 @@ public class BookDTO implements Book {
     }
 
     public BookDTO(Book book) {
-        id=book.getId();
+        id = book.getId();
         this.title = book.getTitle();
         this.genre = book.getGenre();
         this.availability = book.getAvailability();
+        List<? extends Author> list = book.getAuthor();
+        List<AuthorDTO> res = new ArrayList<>();
+        for (Author author : list) {
+            res.add(new AuthorDTO(author));
+        }
+        this.author = res;
     }
 
-//    public BookDTO( String title, String genre,  boolean availability, String lastName, String name
-//    ) {
-//        this.title = title;
-//        this.genre = genre;
-//        this.author.add (new AuthorDTO(name,lastName));
-//        this.availability = availability;
-//    }
+    //    public BookDTO( String title, String genre,  boolean availability, String lastName, String name
+    //    ) {
+    //        this.title = title;
+    //        this.genre = genre;
+    //        this.author.add (new AuthorDTO(name,lastName));
+    //        this.availability = availability;
+    //    }
 
     @Override
     public Long getId() {

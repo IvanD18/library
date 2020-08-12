@@ -15,6 +15,7 @@ public class AuthorDTO implements Author {
     }
 
     public AuthorDTO(Author author) {
+        this.id=author.getId();
         this.name = author.getName();
         this.lastName = author.getLastName();
     }
