@@ -17,6 +17,10 @@ public interface BookRestService {
     @GET
     List<BookDTO> getAll();
 
+    @GET
+    @Path("genre/{name}")
+    List<BookDTO> getAll(@PathParam("name") String name, @QueryParam("limit") int limit, @QueryParam("offset") int offset);
+
     @POST
     void create(BookDTO book);
 

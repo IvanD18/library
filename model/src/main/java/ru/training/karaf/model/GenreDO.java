@@ -7,8 +7,7 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(name = GenreDO.GET_ALL, query = "SELECT g FROM GenreDO AS g"),
         @NamedQuery(name = GenreDO.GET_BY_ID, query = "SELECT g FROM GenreDO AS g WHERE g.id = :id"),
-        @NamedQuery(name = GenreDO.GET_BY_NAME, query = "SELECT g FROM GenreDO AS g WHERE g.name = :name"),
-        @NamedQuery(name = GenreDO.GET_WITH_TYPE, query = "SELECT g.id FROM GenreDO AS g join UserDO as g WHERE g.name = :name")
+        @NamedQuery(name = GenreDO.GET_BY_NAME, query = "SELECT g FROM GenreDO AS g WHERE g.name = :name")
 })
 public class GenreDO implements Genre {
 

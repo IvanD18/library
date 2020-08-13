@@ -3,8 +3,11 @@ package ru.training.karaf.repo;
 import org.apache.aries.jpa.template.JpaTemplate;
 import ru.training.karaf.model.Genre;
 import ru.training.karaf.model.GenreDO;
+import ru.training.karaf.model.Role;
 import ru.training.karaf.model.RoleDO;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +42,16 @@ public class GenreRepoImpl  implements GenreRepo{
 
     @Override
     public Optional<? extends Genre> get(String name) {
-        return Optional.empty();
+        return template.txExpr(em -> getByName(name, em));
+    }
+
+    public Optional<? extends Genre> getByName(String name, EntityManager em) {
+        try {
+            return Optional.of(em.createNamedQuery(GenreDO.GET_BY_NAME, GenreDO.class).setParameter("name", name)
+                    .getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

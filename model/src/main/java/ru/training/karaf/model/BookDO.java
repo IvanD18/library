@@ -11,7 +11,9 @@ import java.util.List;
         @NamedQuery(name = BookDO.SHOW_COMMENTS, query = "SELECT r.comment FROM BookDO AS b join ReviewDO as r WHERE b.id = :id"),
         @NamedQuery(name = BookDO.AVERAGE_RATING, query = "SELECT AVG(r.rating) FROM BookDO AS b join ReviewDO as r WHERE b.id = :id"),
         @NamedQuery(name = BookDO.SEARCH_BY_TITLE, query = "SELECT b FROM BookDO AS b WHERE b.title = :title"),
-        //@NamedQuery(name = BookDO.GET_AUTHORS, query = "SELECT a FROM BookDO AS b JOIN AuthorDO AS a WHERE b.id = :id")
+        //        @NamedQuery(name = BookDO.SEARCH_BY_GENRE, query = "SELECT b FROM BookDO AS b JOIN GenreDO AS g WHERE g.name = :name limit :limit
+        //        offset " +
+        //                ":offset")
 })
 
 @NamedNativeQueries(
@@ -19,7 +21,10 @@ import java.util.List;
                 @NamedNativeQuery(name = BookDO.GET_AUTHORS, query = "select a.* from author as a where a.id in (select ba.author_id from " +
                         "book_author" +
                         " as ba  " +
-                        " where ba.bookdo_id = ?)", resultClass = AuthorDO.class)
+                        " where ba.bookdo_id = ?)", resultClass = AuthorDO.class),
+                @NamedNativeQuery(name = BookDO.SEARCH_BY_GENRE,
+                        query = "SELECT b.* FROM book as b where b.genre_id in(select g.id from genre as g where g.genre_name LIKE ?)  limit" +
+                                " ? offset ?", resultClass = BookDO.class)
         }
 )
 public class BookDO implements Book {
@@ -29,6 +34,7 @@ public class BookDO implements Book {
     public static final String SHOW_COMMENTS = "Book.showComments";
     public static final String AVERAGE_RATING = "Book.averageRating";
     public static final String SEARCH_BY_TITLE = "Book.searchByAuthor";
+    public static final String SEARCH_BY_GENRE = "Book.searchByGenre";
     public static final String GET_AUTHORS = "Book.getAuthors";
 
     @Id
@@ -40,7 +46,7 @@ public class BookDO implements Book {
 
     private String title;
 
-    @OneToOne
+    @ManyToOne
     private GenreDO genre;
 
     @ManyToMany

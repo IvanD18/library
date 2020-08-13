@@ -8,6 +8,7 @@
     <reference id="bookRepo" interface="ru.training.karaf.repo.BookRepo"/>
     <reference id="authorRepo" interface="ru.training.karaf.repo.AuthorRepo"/>
     <reference id="reviewRepo" interface="ru.training.karaf.repo.ReviewRepo"/>
+    <reference id="genreRepo" interface="ru.training.karaf.repo.GenreRepo"/>
 
     <bean id="userRestServiceBean" class="ru.training.karaf.rest.UserRestServiceImpl">
         <property name="bookRepo" ref="bookRepo"/>
@@ -15,11 +16,16 @@
         <property name="roleRepo" ref="roleRepo"/>
     </bean>
 
+    <bean id="genreRestServiceBean" class="ru.training.karaf.rest.GenreRestServiceImpl">
+        <argument ref="genreRepo"/>
+    </bean>
+
 
     <bean id="bookRestServiceBean" class="ru.training.karaf.rest.BookRestServiceImpl">
         <argument ref="bookRepo"/>
         <argument ref="authorRepo"/>
         <argument ref="reviewRepo"/>
+        <argument ref="genreRepo"/>
     </bean>
 
     <bean id="authorRestServiceBean" class="ru.training.karaf.rest.AuthorRestServiceImpl">
@@ -48,6 +54,7 @@
             <ref component-id="bookRestServiceBean"/>
             <ref component-id="authorRestServiceBean"/>
             <ref component-id="reviewRestServiceBean"/>
+            <ref component-id="genreRestServiceBean"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>

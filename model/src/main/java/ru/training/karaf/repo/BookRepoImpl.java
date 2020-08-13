@@ -72,9 +72,7 @@ public class BookRepoImpl implements BookRepo {
             });
         } catch (SQLException | IOException e) {
             System.out.println(e);
-
         }
-
     }
 
     @Override
@@ -82,14 +80,14 @@ public class BookRepoImpl implements BookRepo {
         try (Connection conn = datasource.getConnection()) {
             conn.setAutoCommit(false);
             LargeObjectManager manager = conn.unwrap(PGConnection.class).getLargeObjectAPI();
-            long oid =  book.getCover();
-            byte[] result= new byte[62914560];
-            LargeObject lob = manager.open(oid,manager.READ);
+            long oid = book.getCover();
+            byte[] result = new byte[62914560];
+            LargeObject lob = manager.open(oid, manager.READ);
             lob.getInputStream().read(result);
             return result;
         } catch (SQLException | IOException e) {
             System.out.println(e);
-            byte[] err={0};
+            byte[] err = {0};
             return err;
         }
     }
@@ -116,12 +114,13 @@ public class BookRepoImpl implements BookRepo {
     public void create(Book book) {
         BookDO bookToCreate = new BookDO();
         bookToCreate.setTitle(book.getTitle());
-        bookToCreate.setGenre(book.getGenre());
+        bookToCreate.setGenre(new GenreDO(book.getGenre()));
         bookToCreate.setAvailability(book.getAvailability());
         List<AuthorDO> list = new ArrayList<>();
         for (Author author : book.getAuthor()) {
             list.add(new AuthorDO(author));
         }
+        bookToCreate.setGenre(new GenreDO(book.getGenre()));
         bookToCreate.setAuthor(list);
         template.tx(em -> em.persist(bookToCreate));
     }
@@ -131,7 +130,7 @@ public class BookRepoImpl implements BookRepo {
         template.tx(em -> {
             getById(id, em).ifPresent(bookToUpdate -> {
                 bookToUpdate.setTitle(book.getTitle());
-                bookToUpdate.setGenre(book.getGenre());
+                bookToUpdate.setGenre(new GenreDO(book.getGenre()));
                 bookToUpdate.setAvailability(book.getAvailability());
 
                 em.merge(bookToUpdate);
@@ -186,6 +185,20 @@ public class BookRepoImpl implements BookRepo {
     private BookDO searchByTitle(String title, EntityManager em) {
         try {
             return em.createNamedQuery(BookDO.SEARCH_BY_TITLE, BookDO.class).setParameter("title", title).getSingleResult();
+        } catch (NoResultException e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public List<BookDO> searchByGenre(String name, int limit, int offset) {
+        return template.txExpr(em -> searchByGenre(name, limit, offset, em));
+    }
+
+    private List<BookDO> searchByGenre(String name, int limit, int offset, EntityManager em) {
+        try {
+            return em.createNamedQuery(BookDO.SEARCH_BY_GENRE).setParameter(1, name).setParameter(2, limit).setParameter(
+                    3, offset).getResultList();
         } catch (NoResultException e) {
             throw e;
         }

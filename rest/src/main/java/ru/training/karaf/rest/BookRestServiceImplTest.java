@@ -5,6 +5,7 @@ import org.mockito.Mockito;
 import ru.training.karaf.model.Book;
 import ru.training.karaf.repo.AuthorRepo;
 import ru.training.karaf.repo.BookRepo;
+import ru.training.karaf.repo.GenreRepo;
 import ru.training.karaf.repo.ReviewRepo;
 
 import java.util.ArrayList;
@@ -24,8 +25,9 @@ public class BookRestServiceImplTest {
         BookRepo repo = Mockito.mock(BookRepo.class);
         AuthorRepo authorRepo = Mockito.mock(AuthorRepo.class);
         ReviewRepo reviewRepo = Mockito.mock(ReviewRepo.class);
+        GenreRepo genreRepo = Mockito.mock(GenreRepo.class);
         Mockito.doReturn(list).when(repo).showComments(id);
-        BookRestService rest = new BookRestServiceImpl(repo, authorRepo, reviewRepo);
+        BookRestService rest = new BookRestServiceImpl(repo, authorRepo, reviewRepo,genreRepo);
         List<String> a=rest.showComments(id);
         assertTrue(a.isEmpty());
     }
@@ -38,8 +40,9 @@ public class BookRestServiceImplTest {
         BookRepo repo = Mockito.mock(BookRepo.class);
         AuthorRepo authorRepo = Mockito.mock(AuthorRepo.class);
         ReviewRepo reviewRepo = Mockito.mock(ReviewRepo.class);
+        GenreRepo genreRepo = Mockito.mock(GenreRepo.class);
         Mockito.doReturn(list).when(repo).showComments(id);
-        BookRestService rest = new BookRestServiceImpl(repo, authorRepo, reviewRepo);
+        BookRestService rest = new BookRestServiceImpl(repo, authorRepo, reviewRepo,genreRepo);
         List<String> a=rest.showComments(id);
         assertFalse(a.isEmpty());
     }
@@ -51,8 +54,9 @@ public class BookRestServiceImplTest {
         BookRepo repo = Mockito.mock(BookRepo.class);
         AuthorRepo authorRepo = Mockito.mock(AuthorRepo.class);
         ReviewRepo reviewRepo = Mockito.mock(ReviewRepo.class);
+        GenreRepo genreRepo = Mockito.mock(GenreRepo.class);
         Mockito.doReturn(rating).when(repo).averageRating(id);
-        BookRestService rest = new BookRestServiceImpl(repo, authorRepo, reviewRepo);
+        BookRestService rest = new BookRestServiceImpl(repo, authorRepo, reviewRepo,genreRepo);
         double ans=rest.averageRating(id);
         assertTrue(ans==rating);
     }

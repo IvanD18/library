@@ -23,7 +23,7 @@ public interface BookRepo {
 
     void update(Long id, Book book);
 
-    Optional<? extends Book> get(Long  id);
+    Optional<? extends Book> get(Long id);
 
     void delete(Long id);
 
@@ -35,4 +35,5 @@ public interface BookRepo {
 
     Book searchByTitle(String title);
 
+    List<? extends Book> searchByGenre(String name, int limit, int offset);
 }

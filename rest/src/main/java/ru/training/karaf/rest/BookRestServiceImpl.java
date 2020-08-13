@@ -4,9 +4,11 @@ import ru.training.karaf.model.Author;
 import ru.training.karaf.model.Book;
 import ru.training.karaf.repo.AuthorRepo;
 import ru.training.karaf.repo.BookRepo;
+import ru.training.karaf.repo.GenreRepo;
 import ru.training.karaf.repo.ReviewRepo;
 import ru.training.karaf.rest.dto.AuthorDTO;
 import ru.training.karaf.rest.dto.BookDTO;
+import ru.training.karaf.rest.dto.GenreDTO;
 import ru.training.karaf.rest.dto.ReviewDTO;
 
 import javax.ws.rs.NotFoundException;
@@ -20,40 +22,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BookRestServiceImpl implements BookRestService {
-    BookRepo repo;
-    AuthorRepo authorRepo;
-    ReviewRepo reviewRepo;
+    private BookRepo repo;
+    private AuthorRepo authorRepo;
+    private ReviewRepo reviewRepo;
+    private GenreRepo genreRepo;
 
-    public BookRestServiceImpl(BookRepo repo, AuthorRepo authorRepo, ReviewRepo reviewRepo) {
+    public BookRestServiceImpl(BookRepo repo, AuthorRepo authorRepo, ReviewRepo reviewRepo, GenreRepo genreRepo) {
         this.repo = repo;
         this.authorRepo = authorRepo;
         this.reviewRepo = reviewRepo;
+        this.genreRepo = genreRepo;
     }
 
     @Override
     public List<BookDTO> getAll() {
-//        int i = 0;
-//        long id = 0;
-//        String name,lastName;
-//        List<BookDTO> a = new ArrayList<>();
-//        List<? extends Book> list = repo.getAll();
-//
-//        for (Book book : list) {
-//            a.add(new BookDTO(book));
-//            id = a.get(i).getId();
-//            List<? extends Author> list2 = repo.getAuthors(id);
-//            List<AuthorDTO> b = new ArrayList<>();
-//            for (Author author : list2) {
-//                name = author.getName();
-//                lastName = author.getLastName();
-//
-//                b.add(new AuthorDTO(name, lastName, author.getId()));
-//            }
-//
-//            a.get(i).setAuthor(b);
-//            i++;
-//        }
         List<BookDTO> result = repo.getAll().stream().map(b -> new BookDTO(b)).collect(Collectors.toList());
+        return result;
+    }
+
+    @Override
+    public List<BookDTO> getAll(String name, int limit, int offset) {
+        List<BookDTO> result = repo.searchByGenre(name,limit,offset).stream().map(b -> new BookDTO(b)).collect(Collectors.toList());
         return result;
     }
 
@@ -65,12 +54,13 @@ public class BookRestServiceImpl implements BookRestService {
             list.add(new AuthorDTO(author.getName(), author.getLastName(), authorRepo.get(author.getName(), author.getLastName()).get().getId()));
         }
         book.setAuthor(list);
+        book.setGenre(new GenreDTO(book.getGenre().getName(), genreRepo.get(book.getGenre().getName()).get().getId()));
         repo.create(book);
     }
 
     @Override
     public void addCover(InputStream stream, Long id) {
-        repo.addImage(stream,id);
+        repo.addImage(stream, id);
     }
 
     @Override

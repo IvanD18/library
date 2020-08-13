@@ -6,10 +6,15 @@
 
     <bean id="userRepo" class="ru.training.karaf.repo.UserRepoImpl">
         <argument ref="jpaTemplate"/>
-
-
     </bean>
     <service ref="userRepo" interface="ru.training.karaf.repo.UserRepo"/>
+
+
+    <bean id="genreRepo" class="ru.training.karaf.repo.GenreRepoImpl">
+        <argument ref="jpaTemplate"/>
+    </bean>
+    <service ref="genreRepo" interface="ru.training.karaf.repo.GenreRepo"/>
+
 
     <bean id="roleRepo" class="ru.training.karaf.repo.RoleRepoImpl">
         <argument ref="jpaTemplate"/>

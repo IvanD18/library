@@ -22,6 +22,8 @@ public class BookDTO implements Book {
     public BookDTO() {
     }
 
+
+
     public BookDTO(Book book) {
 
         id = book.getId();
@@ -77,5 +79,8 @@ public class BookDTO implements Book {
 
     public void setAuthor(List<AuthorDTO> author) {
         this.author = author;
+    }
+    public void setGenre(GenreDTO genre) {
+        this.genre = genre;
     }
 }
