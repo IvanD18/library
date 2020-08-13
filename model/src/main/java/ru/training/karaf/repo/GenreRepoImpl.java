@@ -1,0 +1,54 @@
+package ru.training.karaf.repo;
+
+import org.apache.aries.jpa.template.JpaTemplate;
+import ru.training.karaf.model.Genre;
+import ru.training.karaf.model.GenreDO;
+import ru.training.karaf.model.RoleDO;
+
+import java.util.List;
+import java.util.Optional;
+
+public class GenreRepoImpl  implements GenreRepo{
+    private JpaTemplate template;
+
+    public GenreRepoImpl(JpaTemplate template) {
+        this.template = template;
+    }
+
+    @Override
+    public List<? extends Genre> getAll() {
+        return template.txExpr(em -> em.createNamedQuery(GenreDO.GET_ALL, GenreDO.class).getResultList());
+    }
+
+    @Override
+    public void create(Genre genre) {
+        GenreDO genreToCreate = new GenreDO();
+        genreToCreate.setName(genre.getName());
+        template.tx(em -> em.persist(genreToCreate));
+    }
+
+    @Override
+    public void update(Long id, Genre genre) {
+
+    }
+
+    @Override
+    public Optional<? extends Genre> get(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<? extends Genre> get(String name) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Long> showWithGenre(String name) {
+        return null;
+    }
+
+    @Override
+    public void delete(Long id) {
+
+    }
+}
