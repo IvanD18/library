@@ -1,17 +1,35 @@
 package ru.training.karaf.repo;
 
 import org.apache.aries.jpa.template.JpaTemplate;
+import org.postgresql.PGConnection;
+import org.postgresql.core.BaseConnection;
+import org.postgresql.largeobject.LargeObject;
+import org.postgresql.largeobject.LargeObjectManager;
 import ru.training.karaf.model.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Array;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.*;
 
 public class BookRepoImpl implements BookRepo {
     private JpaTemplate template;
+    private DataSource datasource;
 
-    public BookRepoImpl(JpaTemplate template) {
+    static final String URL = "jdbc:postgresql://localhost:5432/postgres";
+    static final String USER = "postgres";
+    static final String PASS = "admin";
+
+    public BookRepoImpl(JpaTemplate template, DataSource datasource) {
         this.template = template;
+        this.datasource = datasource;
     }
 
     //    public void addAuthor(Long id, AuthorDO author) {
@@ -33,13 +51,57 @@ public class BookRepoImpl implements BookRepo {
     }
 
     @Override
+    public void addImage(InputStream stream, Long id) {
+        try (Connection conn = datasource.getConnection()) {
+
+            conn.setAutoCommit(false);
+            LargeObjectManager manager = conn.unwrap(PGConnection.class).getLargeObjectAPI();
+            long oid = manager.createLO();
+            LargeObject object = manager.open(oid);
+            byte[] res = new byte[62914560];
+            stream.read(res);
+            object.write(res);
+            object.close();
+            conn.commit();
+            template.tx(em -> {
+
+                getById(id, em).ifPresent(bookToUpdate -> {
+                    bookToUpdate.setCover(oid);
+                    em.merge(bookToUpdate);
+                });
+            });
+        } catch (SQLException | IOException e) {
+            System.out.println(e);
+
+        }
+
+    }
+
+    @Override
+    public byte[] getImage(Book book) {
+        try (Connection conn = datasource.getConnection()) {
+            conn.setAutoCommit(false);
+            LargeObjectManager manager = conn.unwrap(PGConnection.class).getLargeObjectAPI();
+            long oid =  book.getCover();
+            byte[] result= new byte[62914560];
+            LargeObject lob = manager.open(oid,manager.READ);
+            lob.getInputStream().read(result);
+            return result;
+        } catch (SQLException | IOException e) {
+            System.out.println(e);
+            byte[] err={0};
+            return err;
+        }
+    }
+
+    @Override
     public List<AuthorDO> getAuthors(Long id) {
         return template.txExpr(em -> getAuthors(id, em));
     }
 
     public List<AuthorDO> getAuthors(Long id, EntityManager em) {
         try {
-            return em.createNamedQuery(BookDO.GET_AUTHORS).setParameter(1,id).getResultList();
+            return em.createNamedQuery(BookDO.GET_AUTHORS).setParameter(1, id).getResultList();
         } catch (NoResultException e) {
             return Collections.EMPTY_LIST;
         }

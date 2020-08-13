@@ -6,6 +6,8 @@
 
     <bean id="userRepo" class="ru.training.karaf.repo.UserRepoImpl">
         <argument ref="jpaTemplate"/>
+
+
     </bean>
     <service ref="userRepo" interface="ru.training.karaf.repo.UserRepo"/>
 
@@ -21,6 +23,7 @@
 
     <bean id="bookRepo" class="ru.training.karaf.repo.BookRepoImpl">
         <argument ref="jpaTemplate"/>
+        <argument ref="datasource"/>
     </bean>
     <service ref="bookRepo" interface="ru.training.karaf.repo.BookRepo"/>
 

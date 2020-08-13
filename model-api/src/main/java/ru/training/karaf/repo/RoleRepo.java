@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoleRepo {
+
     List<? extends Role> getAll();
 
     void create(Role role);

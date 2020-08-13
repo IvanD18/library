@@ -12,6 +12,8 @@ import ru.training.karaf.rest.dto.ReviewDTO;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,6 +66,16 @@ public class BookRestServiceImpl implements BookRestService {
         }
         book.setAuthor(list);
         repo.create(book);
+    }
+
+    @Override
+    public void addCover(InputStream stream, Long id) {
+        repo.addImage(stream,id);
+    }
+
+    @Override
+    public byte[] showCover(Long id) {
+        return repo.getImage(repo.get(id).get());
     }
 
     @Override

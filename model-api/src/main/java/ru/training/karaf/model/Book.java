@@ -5,6 +5,8 @@ import java.util.List;
 public interface Book {
 
 
+    Long getCover();
+
     Long getId();
 
     String getTitle();

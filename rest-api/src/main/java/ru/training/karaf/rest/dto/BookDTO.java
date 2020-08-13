@@ -13,6 +13,7 @@ public class BookDTO implements Book {
     private String genre;
     private List<AuthorDTO> author;
     private boolean availability;
+    private Long cover;
 
     public BookDTO(Long id) {
         this.id = id;
@@ -22,10 +23,12 @@ public class BookDTO implements Book {
     }
 
     public BookDTO(Book book) {
+
         id = book.getId();
         this.title = book.getTitle();
         this.genre = book.getGenre();
         this.availability = book.getAvailability();
+        this.cover = book.getCover();
         List<? extends Author> list = book.getAuthor();
         List<AuthorDTO> res = new ArrayList<>();
         for (Author author : list) {
@@ -41,6 +44,11 @@ public class BookDTO implements Book {
     //        this.author.add (new AuthorDTO(name,lastName));
     //        this.availability = availability;
     //    }
+
+    @Override
+    public Long getCover() {
+        return cover;
+    }
 
     @Override
     public Long getId() {
