@@ -11,7 +11,7 @@ public interface Book {
 
     String getTitle();
 
-    String getGenre();
+    Genre getGenre();
 
     List<? extends Author> getAuthor();
 

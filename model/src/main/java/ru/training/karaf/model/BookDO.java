@@ -35,20 +35,18 @@ public class BookDO implements Book {
     @GeneratedValue
     private Long id;
 
-
-
     @Column(columnDefinition = "oid")
     private Long cover;
 
     private String title;
 
-    private String genre;
+    @OneToOne
+    private GenreDO genre;
 
     @ManyToMany
     private List<AuthorDO> author;
 
     private boolean availability;
-
 
     public Long getCover() {
         return cover;
@@ -63,7 +61,7 @@ public class BookDO implements Book {
         this.title = book.getTitle();
     }
 
-    public BookDO(String title, String genre, List<AuthorDO> author, boolean availability) {
+    public BookDO(String title, GenreDO genre, List<AuthorDO> author, boolean availability) {
         this.title = title;
         this.genre = genre;
         this.author = author;
@@ -81,7 +79,7 @@ public class BookDO implements Book {
         this.title = title;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(GenreDO genre) {
         this.genre = genre;
     }
 
@@ -112,7 +110,7 @@ public class BookDO implements Book {
     }
 
     @Override
-    public String getGenre() {
+    public GenreDO getGenre() {
         return genre;
     }
 

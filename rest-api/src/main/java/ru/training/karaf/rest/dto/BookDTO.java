@@ -10,7 +10,7 @@ import java.util.Optional;
 public class BookDTO implements Book {
     private Long id;
     private String title;
-    private String genre;
+    private GenreDTO genre;
     private List<AuthorDTO> author;
     private boolean availability;
     private Long cover;
@@ -26,7 +26,7 @@ public class BookDTO implements Book {
 
         id = book.getId();
         this.title = book.getTitle();
-        this.genre = book.getGenre();
+        this.genre = new GenreDTO( book.getGenre());
         this.availability = book.getAvailability();
         this.cover = book.getCover();
         List<? extends Author> list = book.getAuthor();
@@ -61,7 +61,7 @@ public class BookDTO implements Book {
     }
 
     @Override
-    public String getGenre() {
+    public GenreDTO getGenre() {
         return genre;
     }
 
