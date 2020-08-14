@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,8 +42,12 @@ public class BookRestServiceImpl implements BookRestService {
     }
 
     @Override
-    public List<BookDTO> getAll(String name, int limit, int offset) {
-        List<BookDTO> result = repo.searchByGenre(name,limit,offset).stream().map(b -> new BookDTO(b)).collect(Collectors.toList());
+    public List<BookDTO> getAll(String name, int sz, int pg) {
+        int offset = 0;
+        if (pg > 0 & sz >= 0) {
+            offset = sz * (pg - 1);
+        }
+        List<BookDTO> result = repo.searchByGenre(name, sz, offset).stream().map(b -> new BookDTO(b)).collect(Collectors.toList());
         return result;
     }
 
@@ -101,8 +106,23 @@ public class BookRestServiceImpl implements BookRestService {
     }
 
     @Override
-    public BookDTO searchByTitle(String title) {
+    public List<BookDTO> searchByTitle(String title, int sz, int pg) {
+        int offset = 0;
+        if (pg > 0 & sz >= 0) {
+            offset = sz * (pg - 1);
+        }
+        if (pg == 0 & sz == 0) {
+            offset = 1;
+            sz = 20;
+        }
+        List<BookDTO> result = repo.searchByTitle(title, sz, offset).stream().map(b -> new BookDTO(b)).collect(Collectors.toList());
+        return result;
+    }
 
-        return new BookDTO(repo.searchByTitle(title));
+    @Override
+    public List<BookDTO> searchByAuthor(String name, String surname, int sz, int pg, String sort) {
+        int offset = pg > 0 & sz >= 0 ? sz * (pg - 1) : 0;
+        List<BookDTO> result = repo.searchByAuthor(name, surname, sz, offset, sort).stream().map(b -> new BookDTO(b)).collect(Collectors.toList());
+        return result;
     }
 }

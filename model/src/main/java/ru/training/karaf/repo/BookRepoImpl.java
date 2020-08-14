@@ -178,13 +178,14 @@ public class BookRepoImpl implements BookRepo {
     }
 
     @Override
-    public BookDO searchByTitle(String title) {
-        return template.txExpr(em -> searchByTitle(title, em));
+    public List<BookDO> searchByTitle(String title, int limit, int offset) {
+        return template.txExpr(em -> searchByTitle("%" + title + "%", limit, offset, em));
     }
 
-    private BookDO searchByTitle(String title, EntityManager em) {
+    private List<BookDO> searchByTitle(String title, int limit, int offset, EntityManager em) {
         try {
-            return em.createNamedQuery(BookDO.SEARCH_BY_TITLE, BookDO.class).setParameter("title", title).getSingleResult();
+            return em.createNamedQuery(BookDO.SEARCH_BY_TITLE).setParameter(1, title).setParameter(2, limit).setParameter(
+                    3, offset).getResultList();
         } catch (NoResultException e) {
             throw e;
         }
@@ -193,6 +194,20 @@ public class BookRepoImpl implements BookRepo {
     @Override
     public List<BookDO> searchByGenre(String name, int limit, int offset) {
         return template.txExpr(em -> searchByGenre(name, limit, offset, em));
+    }
+
+    @Override
+    public List<? extends Book> searchByAuthor(String name, String lastName, int limit, int offset, String sort) {
+        return template.txExpr(em -> searchByAuthor(name, lastName, limit, offset, sort, em));
+    }
+
+    private List<BookDO> searchByAuthor(String name, String lastName, int limit, int offset, String sort, EntityManager em) {
+        try {
+            return em.createNamedQuery(BookDO.SEARCH_BY_AUTHOR).setParameter(1, name).setParameter(2, lastName).setParameter(
+                    3, limit).setParameter(4,offset).getResultList();
+        } catch (NoResultException e) {
+            throw e;
+        }
     }
 
     private List<BookDO> searchByGenre(String name, int limit, int offset, EntityManager em) {

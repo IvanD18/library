@@ -10,7 +10,7 @@ import java.util.List;
         @NamedQuery(name = BookDO.GET_BY_ID, query = "SELECT u FROM BookDO AS u WHERE u.id = :id"),
         @NamedQuery(name = BookDO.SHOW_COMMENTS, query = "SELECT r.comment FROM BookDO AS b join ReviewDO as r WHERE b.id = :id"),
         @NamedQuery(name = BookDO.AVERAGE_RATING, query = "SELECT AVG(r.rating) FROM BookDO AS b join ReviewDO as r WHERE b.id = :id"),
-        @NamedQuery(name = BookDO.SEARCH_BY_TITLE, query = "SELECT b FROM BookDO AS b WHERE b.title = :title"),
+        //@NamedQuery(name = BookDO.SEARCH_BY_TITLE, query = "SELECT b FROM BookDO AS b WHERE b.title LIKE :title limit :limit offset :offset"),
         //        @NamedQuery(name = BookDO.SEARCH_BY_GENRE, query = "SELECT b FROM BookDO AS b JOIN GenreDO AS g WHERE g.name = :name limit :limit
         //        offset " +
         //                ":offset")
@@ -18,13 +18,20 @@ import java.util.List;
 
 @NamedNativeQueries(
         {
+                @NamedNativeQuery(name = BookDO.SEARCH_BY_AUTHOR,
+                        query = "SELECT b.* FROM book as b left join book_author as ba on ba.author_id in(select a.id from author " +
+                                "as a where a.author_surname LIKE ?1 and a.author_surname LIKE ?2 ) order by b.title ASC limit" +
+                                " ?3 offset ?4 ", resultClass = BookDO.class),
+
+                @NamedNativeQuery(name = BookDO.SEARCH_BY_TITLE, query = "SELECT b.* FROM book AS b WHERE b.title LIKE ?1 limit ?2 offset " +
+                        "?3", resultClass = BookDO.class),
                 @NamedNativeQuery(name = BookDO.GET_AUTHORS, query = "select a.* from author as a where a.id in (select ba.author_id from " +
                         "book_author" +
                         " as ba  " +
                         " where ba.bookdo_id = ?)", resultClass = AuthorDO.class),
                 @NamedNativeQuery(name = BookDO.SEARCH_BY_GENRE,
-                        query = "SELECT b.* FROM book as b where b.genre_id in(select g.id from genre as g where g.genre_name LIKE ?)  limit" +
-                                " ? offset ?", resultClass = BookDO.class)
+                        query = "SELECT b.* FROM book as b where b.genre_id in(select g.id from genre as g where g.genre_name LIKE ?1)  limit" +
+                                " ?2 offset ?3", resultClass = BookDO.class)
         }
 )
 public class BookDO implements Book {
@@ -33,8 +40,9 @@ public class BookDO implements Book {
     public static final String GET_BY_ID = "Book.getById";
     public static final String SHOW_COMMENTS = "Book.showComments";
     public static final String AVERAGE_RATING = "Book.averageRating";
-    public static final String SEARCH_BY_TITLE = "Book.searchByAuthor";
+    public static final String SEARCH_BY_TITLE = "Book.searchByTitle";
     public static final String SEARCH_BY_GENRE = "Book.searchByGenre";
+    public static final String SEARCH_BY_AUTHOR = "Book.searchByAuthor";
     public static final String GET_AUTHORS = "Book.getAuthors";
 
     @Id

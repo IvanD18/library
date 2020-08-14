@@ -19,7 +19,7 @@ public interface BookRestService {
 
     @GET
     @Path("genre/{name}")
-    List<BookDTO> getAll(@PathParam("name") String name, @QueryParam("limit") int limit, @QueryParam("offset") int offset);
+    List<BookDTO> getAll(@PathParam("name") String name, @QueryParam("sz") int limit, @QueryParam("pg") int offset);
 
     @POST
     void create(BookDTO book);
@@ -60,6 +60,13 @@ public interface BookRestService {
     double averageRating(@PathParam("id") Long id);
 
     @GET
-    @Path("/find/{title}")
-    BookDTO searchByTitle(@PathParam("title") String title);
+    @Path("/title")
+    List<BookDTO> searchByTitle(@QueryParam("title") String title, @QueryParam("sz") int limit, @QueryParam("pg") int offset);
+
+    @GET
+    @Path("/author")
+    List<BookDTO> searchByAuthor(
+            @QueryParam("name") String title, @QueryParam("surname") String surname, @QueryParam("sz") int limit,
+            @QueryParam("pg") int offset, @QueryParam("sort") String sort
+    );
 }
