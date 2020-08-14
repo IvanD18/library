@@ -19,9 +19,10 @@ import java.util.List;
 @NamedNativeQueries(
         {
                 @NamedNativeQuery(name = BookDO.SEARCH_BY_AUTHOR,
-                        query = "SELECT b.* FROM book as b left join book_author as ba on ba.author_id in(select a.id from author " +
-                                "as a where a.author_surname LIKE ?1 and a.author_surname LIKE ?2 ) order by b.title ASC limit" +
-                                " ?3 offset ?4 ", resultClass = BookDO.class),
+                        query = "SELECT b.* FROM book as b where b.id in (select bookdo_id from book_author where author_id in(select a.id from " +
+                                "author " +
+                                "  as a where a.author_name LIKE ?1 and a.author_surname " +
+                                "  LIKE ?2 order by a.author_surname ASC))  limit ?3 offset ?4", resultClass = BookDO.class),
 
                 @NamedNativeQuery(name = BookDO.SEARCH_BY_TITLE, query = "SELECT b.* FROM book AS b WHERE b.title LIKE ?1 limit ?2 offset " +
                         "?3", resultClass = BookDO.class),
