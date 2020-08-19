@@ -45,6 +45,7 @@ public class UserDO implements User {
     private String login;
     private Integer age;
     private String address;
+    private String password;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<BookDO> book;
@@ -64,18 +65,15 @@ public class UserDO implements User {
         return book;
     }
 
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
     public void setBook(List<BookDO> book) {
         this.book = book;
     }
 
-//    public List<ReviewDO> getReview() {
-//        return review;
-//    }
-//
-//    public void setReview(List<ReviewDO> review) {
-//        this.review = review;
-//    }
 
     public UserDO(User user) {
         this.id = user.getId();
@@ -106,6 +104,10 @@ public class UserDO implements User {
     @Override
     public Long getId() {
         return id;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setId(Long id) {

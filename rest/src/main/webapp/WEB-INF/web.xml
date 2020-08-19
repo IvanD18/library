@@ -15,15 +15,19 @@
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
-<!--    <filter>-->
-<!--        <filter-name>securityFilter</filter-name>-->
-<!--        <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>-->
-<!--    </filter>-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>securityFilter</filter-name>-->
-<!--        <url-pattern>/*</url-pattern>-->
-<!--        <dispatcher>REQUEST</dispatcher>-->
-<!--        <dispatcher>FORWARD</dispatcher>-->
-<!--        <dispatcher>INCLUDE</dispatcher>-->
-<!--    </filter-mapping>-->
+    <listener>
+        <listener-class>ru.training.karaf.rest.MyListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>securityFilter</filter-name>
+        <filter-class>ru.training.karaf.rest.MyFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
 </web-app>

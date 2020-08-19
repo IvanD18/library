@@ -20,6 +20,7 @@ public interface User {
 
     List<? extends Book> getBook();
 
+    String getPassword();
 
 
     Role getRole();

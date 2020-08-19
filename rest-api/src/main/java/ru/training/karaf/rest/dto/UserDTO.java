@@ -18,6 +18,7 @@ public class UserDTO implements User {
     private Set<String> properties;
     private List<BookDTO> book;
     private RoleDTO role;
+    private String password;
 
     public UserDTO() {
     }
@@ -31,6 +32,7 @@ public class UserDTO implements User {
         age = user.getAge();
         address = user.getAddress();
         properties = user.getProperties();
+        password=user.getPassword();
         List<? extends Book> list = user.getBook();
         List<BookDTO> res = new ArrayList<>();
         for (Book book : list) {
@@ -40,7 +42,9 @@ public class UserDTO implements User {
         this.role = new RoleDTO(user.getRole());
     }
 
-
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public RoleDTO getRole() {
         return role;
@@ -57,6 +61,11 @@ public class UserDTO implements User {
 
     public List<BookDTO> getBook() {
         return book;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     public void setBook(List<BookDTO> book) {

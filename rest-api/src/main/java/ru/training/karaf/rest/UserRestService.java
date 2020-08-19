@@ -1,10 +1,12 @@
 package ru.training.karaf.rest;
 
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import ru.training.karaf.rest.dto.BookDTO;
+import ru.training.karaf.rest.dto.LoginfoDTO;
 import ru.training.karaf.rest.dto.UserDTO;
 
 @Path("users")
@@ -24,6 +26,7 @@ public interface UserRestService {
     List<UserDTO> getAll();
 
     @POST
+    @Path("/registration")
     UserDTO create(UserDTO user);
 
     @PUT
@@ -40,5 +43,9 @@ public interface UserRestService {
 
     @GET
     @Path("/returning/{id}/{book_id}")
-    void returnBook(@PathParam("id") Long id,@PathParam("book_id") Long bookId);
+    void returnBook(@PathParam("id") Long id, @PathParam("book_id") Long bookId);
+
+    @POST
+    @Path("/login")
+    public UserDTO login(LoginfoDTO loginfo);
 }

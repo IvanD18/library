@@ -8,15 +8,22 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.DefaultPasswordService;
+import org.apache.shiro.subject.Subject;
 import ru.training.karaf.model.Book;
 import ru.training.karaf.repo.BookRepo;
 import ru.training.karaf.repo.RoleRepo;
 import ru.training.karaf.repo.UserRepo;
 import ru.training.karaf.rest.dto.BookDTO;
+import ru.training.karaf.rest.dto.LoginfoDTO;
 import ru.training.karaf.rest.dto.RoleDTO;
 import ru.training.karaf.rest.dto.UserDTO;
 
 public class UserRestServiceImpl implements UserRestService {
+
+    private DefaultPasswordService passwordService = new DefaultPasswordService();
 
     private UserRepo repo;
     private RoleRepo roleRepo;
@@ -51,21 +58,7 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public List<UserDTO> getAll() {
-//        int i = 0;
-//
-//        List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
-//        for (UserDTO userDTO : result) {
-//            long id = result.get(i).getId();
-//            List<Long> listBookId = repo.showBooks(result.get(i).getId());
-//            long roleId = repo.showRole(id);
-//            List<BookDTO> resultList = new ArrayList<>();
-//            for (Long aLong : listBookId) {
-//                resultList.add(new BookDTO(bookRepo.get(aLong).get()));
-//            }
-//            userDTO.setBook(resultList);
-//            userDTO.setRole(new RoleDTO(roleRepo.get(roleId).get()));
-//            i++;
-//        }
+
         List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
 
         return result;
@@ -77,6 +70,7 @@ public class UserRestServiceImpl implements UserRestService {
             throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
                     .type(MediaType.APPLICATION_JSON_TYPE).entity(new ErrorDTO("User found ...")).build());
         });
+        user.setPassword(passwordService.encryptPassword(user.getPassword()));
         user.setRole(new RoleDTO(user.getRole().getName(), roleRepo.get(user.getRole().getName()).get().getId()));
         repo.create(user);
         return user;
@@ -102,5 +96,15 @@ public class UserRestServiceImpl implements UserRestService {
     @Override
     public void returnBook(Long id, Long bookId) {
         repo.removeBook(id, bookId);
+    }
+
+    @Override
+    public UserDTO login(LoginfoDTO loginfo) {
+        UsernamePasswordToken token = new UsernamePasswordToken(loginfo.getLogin(), loginfo.getPassword());
+        token.setRememberMe(loginfo.isRememberMe());
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.login(token);
+        System.out.println(currentUser);
+        return new UserDTO(repo.get((String) currentUser.getPrincipal()).get());
     }
 }

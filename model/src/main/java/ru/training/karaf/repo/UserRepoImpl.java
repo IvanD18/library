@@ -29,6 +29,7 @@ public class UserRepoImpl implements UserRepo {
         userToCreate.setLastName(user.getLastName());
         userToCreate.setAddress(user.getAddress());
         userToCreate.setAge(user.getAge());
+        userToCreate.setPassword(user.getPassword());
         userToCreate.setProperties(user.getProperties());
         userToCreate.setRole(new RoleDO(user.getRole()));
         template.tx(em -> em.persist(userToCreate));

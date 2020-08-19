@@ -10,6 +10,7 @@
     <reference id="reviewRepo" interface="ru.training.karaf.repo.ReviewRepo"/>
     <reference id="genreRepo" interface="ru.training.karaf.repo.GenreRepo"/>
 
+
     <bean id="userRestServiceBean" class="ru.training.karaf.rest.UserRestServiceImpl">
         <property name="bookRepo" ref="bookRepo"/>
         <property name="repo" ref="userRepo"/>
@@ -45,10 +46,14 @@
         <argument ref="bookRepo"/>
     </bean>
 
+    <bean id="utils" class="ru.training.karaf.rest.ServiceUtils">
+        <property name="repo" ref="userRepo"/>
+    </bean>
 
     <!-- CXF -->
     <jaxrs:server id="restServer" address="/rest">
         <jaxrs:serviceBeans>
+            <ref component-id="utils"/>
             <ref component-id="userRestServiceBean"/>
             <ref component-id="roleRestServiceBean"/>
             <ref component-id="bookRestServiceBean"/>
@@ -56,6 +61,7 @@
             <ref component-id="reviewRestServiceBean"/>
             <ref component-id="genreRestServiceBean"/>
         </jaxrs:serviceBeans>
+
         <jaxrs:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
             <bean class="org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper"/>
