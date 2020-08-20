@@ -9,13 +9,15 @@ import java.util.List;
         @NamedQuery(name = AuthorDO.GET_ALL, query = "SELECT u FROM AuthorDO AS u"),
         @NamedQuery(name = AuthorDO.GET_BY_ID, query = "SELECT u FROM AuthorDO AS u WHERE u.id = :id"),
         @NamedQuery(name = AuthorDO.GET_BY_NAME, query = "SELECT u FROM AuthorDO AS u WHERE u.name = :name and u.lastName = :lastName"),
-        @NamedQuery(name = AuthorDO.GET_BOOKS, query = "SELECT b.id FROM AuthorDO AS a join BookDO as b WHERE a.id = :id")
+        @NamedQuery(name = AuthorDO.GET_BOOKS, query = "SELECT b.id FROM AuthorDO AS a join BookDO as b WHERE a.id = :id"),
+        @NamedQuery(name = AuthorDO.COUNT_AUTHORS, query = "SELECT COUNT(a) FROM AuthorDO AS a")
 })
 public class AuthorDO implements Author {
     public static final String GET_ALL = "Author.getAll";
     public static final String GET_BY_ID = "Author.getById";
     public static final String GET_BY_NAME = "Author.getByName";
     public static final String GET_BOOKS = "Author.getBooks";
+    public static final String COUNT_AUTHORS = "Author.countAuthors";
 
     @Id
     @GeneratedValue

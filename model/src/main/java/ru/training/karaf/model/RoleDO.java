@@ -9,7 +9,9 @@ import java.util.List;
         @NamedQuery(name = RoleDO.GET_ALL, query = "SELECT u FROM RoleDO AS u"),
         @NamedQuery(name = RoleDO.GET_BY_ID, query = "SELECT u FROM RoleDO AS u WHERE u.id = :id"),
         @NamedQuery(name = RoleDO.GET_BY_NAME, query = "SELECT u FROM RoleDO AS u WHERE u.name = :name"),
-        @NamedQuery(name = RoleDO.GET_WITH_TYPE, query = "SELECT u.id FROM RoleDO AS r join UserDO as u WHERE r.name = :name")
+        @NamedQuery(name = RoleDO.GET_WITH_TYPE, query = "SELECT u.id FROM RoleDO AS r join UserDO as u WHERE r.name = :name"),
+        @NamedQuery(name = RoleDO.COUNT_ROLES, query = "SELECT COUNT(r) FROM RoleDO AS r")
+
 })
 
 public class RoleDO implements Role {
@@ -21,6 +23,8 @@ public class RoleDO implements Role {
     public static final String GET_BY_NAME = "RoleDO.getByName";
 
     public static final String GET_WITH_TYPE = "RoleDO.getWithType";
+
+    public static final String COUNT_ROLES = "RoleDO.countRoles";
 
     @Id
     @GeneratedValue

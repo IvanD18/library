@@ -11,9 +11,7 @@ import javax.persistence.*;
         @NamedQuery(name = UserDO.GET_ALL, query = "SELECT u FROM UserDO AS u"),
         @NamedQuery(name = UserDO.GET_BY_LOGIN, query = "SELECT u FROM UserDO AS u WHERE u.login = :login"),
         @NamedQuery(name = UserDO.GET_BY_ID, query = "SELECT u FROM UserDO AS u WHERE u.id = :id"),
-        //@NamedQuery(name = UserDO.GET_BOOKS, query = "SELECT b.id FROM UserDO AS u join BookDO as b WHERE u.id = :id")
-
-        //@NamedQuery(name = UserDO.DELETE_BOOK, query = "DELETE BookDO FROM UserDO LEFT JOIN BookDO ON UserDO.id = :id WHERE BookDO.id = :book_id")
+        @NamedQuery(name = UserDO.COUNT_USERS, query = "SELECT COUNT(u) FROM UserDO AS u")
 
 })
 @NamedNativeQueries({
@@ -30,7 +28,7 @@ public class UserDO implements User {
     public static final String GET_BOOKS = "Users.getBooks";
     public static final String DELETE_BOOK = "Users.deleteBook";
     public static final String GET_ROLES = "Users.getRoles";
-
+    public static final String COUNT_USERS = "Users.countUsers";
 
 
 
@@ -50,8 +48,7 @@ public class UserDO implements User {
     @OneToMany(fetch = FetchType.EAGER)
     private List<BookDO> book;
 
-//    @OneToMany
-//    private List<ReviewDO> review;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     private RoleDO role;

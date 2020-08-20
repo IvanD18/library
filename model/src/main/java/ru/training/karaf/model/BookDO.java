@@ -10,10 +10,7 @@ import java.util.List;
         @NamedQuery(name = BookDO.GET_BY_ID, query = "SELECT u FROM BookDO AS u WHERE u.id = :id"),
         @NamedQuery(name = BookDO.SHOW_COMMENTS, query = "SELECT r.comment FROM BookDO AS b join ReviewDO as r WHERE b.id = :id"),
         @NamedQuery(name = BookDO.AVERAGE_RATING, query = "SELECT AVG(r.rating) FROM BookDO AS b join ReviewDO as r WHERE b.id = :id"),
-        //@NamedQuery(name = BookDO.SEARCH_BY_TITLE, query = "SELECT b FROM BookDO AS b WHERE b.title LIKE :title limit :limit offset :offset"),
-        //        @NamedQuery(name = BookDO.SEARCH_BY_GENRE, query = "SELECT b FROM BookDO AS b JOIN GenreDO AS g WHERE g.name = :name limit :limit
-        //        offset " +
-        //                ":offset")
+        @NamedQuery(name = BookDO.COUNT_BOOKS, query = "SELECT COUNT(b) FROM BookDO AS b")
 })
 
 @NamedNativeQueries(
@@ -45,6 +42,7 @@ public class BookDO implements Book {
     public static final String SEARCH_BY_GENRE = "Book.searchByGenre";
     public static final String SEARCH_BY_AUTHOR = "Book.searchByAuthor";
     public static final String GET_AUTHORS = "Book.getAuthors";
+    public static final String COUNT_BOOKS = "Book.countBooks";
 
     @Id
     @GeneratedValue

@@ -32,16 +32,6 @@ public class BookRepoImpl implements BookRepo {
         this.datasource = datasource;
     }
 
-    //    public void addAuthor(Long id, AuthorDO author) {
-    //        template.tx(em -> {
-    //            getById(id, em).ifPresent(bookToAdd -> {
-    //                List<AuthorDO> newList = bookToAdd.getAuthor();
-    //                newList.add(author);
-    //                bookToAdd.setAuthor(newList);
-    //                em.merge(bookToAdd);
-    //            });
-    //        });
-    //    }
     public void addReview(Long id, ReviewDO review) {
         template.tx(em -> {
             getById(id, em).ifPresent(bookToAdd -> {

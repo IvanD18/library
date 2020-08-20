@@ -7,7 +7,8 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(name = GenreDO.GET_ALL, query = "SELECT g FROM GenreDO AS g"),
         @NamedQuery(name = GenreDO.GET_BY_ID, query = "SELECT g FROM GenreDO AS g WHERE g.id = :id"),
-        @NamedQuery(name = GenreDO.GET_BY_NAME, query = "SELECT g FROM GenreDO AS g WHERE g.name = :name")
+        @NamedQuery(name = GenreDO.GET_BY_NAME, query = "SELECT g FROM GenreDO AS g WHERE g.name = :name"),
+        @NamedQuery(name = GenreDO.COUNT_GENRES, query = "SELECT COUNT(g) FROM GenreDO AS g")
 })
 public class GenreDO implements Genre {
 
@@ -18,6 +19,8 @@ public class GenreDO implements Genre {
     public static final String GET_BY_NAME = "GenreDO.getByName";
 
     public static final String GET_WITH_TYPE = "GenreDO.getWithType";
+
+    public static final String COUNT_GENRES = "GenreDO.countGenres";
 
     @Id
     @GeneratedValue
