@@ -2,8 +2,6 @@ package ru.training.karaf.repo;
 
 public interface CountRepo {
 
-    Long getCountOfReviews();
-
 
     Long getCountOfReviews(int rating);
 
@@ -13,9 +11,11 @@ public interface CountRepo {
 
     Long getCountOfBooks();
 
+    Long getCountOfBooksForUser(Long user_id);
 
-    Long getCountOfUsers();
+    Long getCountOfAvailableBooks();
 
+    Long getCountOfNotAvailableBooks();
 
     Long getCountOfUsers(int age);
 

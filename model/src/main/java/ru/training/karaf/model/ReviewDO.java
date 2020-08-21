@@ -8,12 +8,14 @@ import javax.xml.namespace.QName;
 @NamedQueries({
         @NamedQuery(name = ReviewDO.GET_ALL, query = "SELECT u FROM ReviewDO AS u"),
         @NamedQuery(name = ReviewDO.GET_BY_ID, query = "SELECT u FROM ReviewDO AS u WHERE u.id = :id"),
-        @NamedQuery(name = ReviewDO.COUNT_REVIEWS, query = "SELECT COUNT(r) FROM ReviewDO AS r")
+        @NamedQuery(name = ReviewDO.COUNT_REVIEWS, query = "SELECT COUNT(r) FROM ReviewDO AS r"),
+        @NamedQuery(name = ReviewDO.COUNT_REVIEWS_WITH_RATING, query = "SELECT COUNT(r) FROM ReviewDO AS r WHERE r.rating > :rating")
 })
 public class ReviewDO implements Review {
     public static final String GET_ALL = "Review.getAll";
     public static final String GET_BY_ID = "Review.getById";
     public static final String COUNT_REVIEWS = "Review.countReviews";
+    public static final String COUNT_REVIEWS_WITH_RATING = "Review.countReviewsWithRating";
 
     @Id
     @GeneratedValue

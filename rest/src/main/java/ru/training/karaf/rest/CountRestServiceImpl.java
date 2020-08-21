@@ -9,14 +9,11 @@ public class CountRestServiceImpl implements CountRestService {
         this.repo = repo;
     }
 
-    @Override
-    public Long getCountOfReviews() {
-        return repo.getCountOfReviews();
-    }
+
 
     @Override
     public Long getCountOfReviews(int rating) {
-        return repo.getCountOfReviews();
+        return repo.getCountOfReviews(rating);
     }
 
     @Override
@@ -30,13 +27,23 @@ public class CountRestServiceImpl implements CountRestService {
     }
 
     @Override
-    public Long getCountOfUsers() {
-        return repo.getCountOfUsers();
+    public Long getCountOfAvailableBooks() {
+        return repo.getCountOfAvailableBooks();
+    }
+
+    @Override
+    public Long getCountOfNotAvailableBooks() {
+        return repo.getCountOfNotAvailableBooks();
+    }
+
+    @Override
+    public Long getCountOfBooks(Long id) {
+        return repo.getCountOfBooksForUser(id);
     }
 
     @Override
     public Long getCountOfUsers(int age) {
-        return repo.getCountOfUsers();
+        return repo.getCountOfUsers(age);
     }
 
     @Override

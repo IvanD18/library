@@ -11,11 +11,12 @@ import javax.persistence.*;
         @NamedQuery(name = UserDO.GET_ALL, query = "SELECT u FROM UserDO AS u"),
         @NamedQuery(name = UserDO.GET_BY_LOGIN, query = "SELECT u FROM UserDO AS u WHERE u.login = :login"),
         @NamedQuery(name = UserDO.GET_BY_ID, query = "SELECT u FROM UserDO AS u WHERE u.id = :id"),
-        @NamedQuery(name = UserDO.COUNT_USERS, query = "SELECT COUNT(u) FROM UserDO AS u")
-
+        @NamedQuery(name = UserDO.COUNT_USERS, query = "SELECT COUNT(u) FROM UserDO AS u"),
+        @NamedQuery(name = UserDO.COUNT_USERS_WITH_AGE, query = "SELECT COUNT(u) FROM UserDO AS u WHERE u.age > :age")
 })
 @NamedNativeQueries({
         @NamedNativeQuery(name = UserDO.DELETE_BOOK, query = "DELETE FROM users_book WHERE userdo_id = :id AND book_id = :book_id"),
+        @NamedNativeQuery(name = UserDO.COUNT_BOOKS, query = "Select count(*) from users_book where userdo_id = ?"),
         @NamedNativeQuery(name = UserDO.GET_ROLES, query = "select r.id from role as r where r.id in (select u.role_id from " +
                 "users as u where u.id = ?)"),
         @NamedNativeQuery(name = UserDO.GET_BOOKS, query = "select b.id from book as b where b.id in (select ub.book_id from " +
@@ -29,8 +30,8 @@ public class UserDO implements User {
     public static final String DELETE_BOOK = "Users.deleteBook";
     public static final String GET_ROLES = "Users.getRoles";
     public static final String COUNT_USERS = "Users.countUsers";
-
-
+    public static final String COUNT_BOOKS = "Users.countBooks";
+    public static final String COUNT_USERS_WITH_AGE = "Users.countUsersWithAge";
 
     @Id
     @GeneratedValue
@@ -47,8 +48,6 @@ public class UserDO implements User {
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<BookDO> book;
-
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     private RoleDO role;
@@ -71,24 +70,21 @@ public class UserDO implements User {
         this.book = book;
     }
 
-
     public UserDO(User user) {
         this.id = user.getId();
-        this.login=user.getLogin();
+        this.login = user.getLogin();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-//        List<? extends Book> list= user.getBook();
-//        List<BookDO> result=new ArrayList<>();
-//        for (Book book1 : list) {
-//            result.add(new BookDO(book1));
-//        }
-//        this.book= result;
+        //        List<? extends Book> list= user.getBook();
+        //        List<BookDO> result=new ArrayList<>();
+        //        for (Book book1 : list) {
+        //            result.add(new BookDO(book1));
+        //        }
+        //        this.book= result;
     }
 
-
-
     public UserDO() {
-        }
+    }
 
     public RoleDO getRole() {
         return role;
