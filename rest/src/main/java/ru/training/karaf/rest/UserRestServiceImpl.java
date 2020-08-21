@@ -52,8 +52,16 @@ public class UserRestServiceImpl implements UserRestService {
     }
 
     @Override
-    public void takeBook(Long id, Long bookId) {
-        repo.addBook(id, bookRepo.get(bookId).get());
+    public String takeBook(Long id, Long bookId) {
+        Book book = bookRepo.get(bookId).get();
+        BookDTO bookDTO = new BookDTO(book);
+        if(book.getAvailability()==true) {
+            bookDTO.setAvailability(false);
+            bookRepo.update(book.getId(),bookDTO);
+            repo.addBook(id, bookRepo.get(bookId).get());
+            return "success";
+        }
+        return "not available";
     }
 
     @Override
@@ -96,6 +104,11 @@ public class UserRestServiceImpl implements UserRestService {
     @Override
     public void returnBook(Long id, Long bookId) {
         repo.removeBook(id, bookId);
+        //TODO проверка возвращена ли книга?
+        Book book = bookRepo.get(bookId).get();
+        BookDTO bookDTO = new BookDTO(book);
+        bookDTO.setAvailability(true);
+        bookRepo.update(book.getId(),bookDTO);
     }
 
     @Override

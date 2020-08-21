@@ -12,6 +12,7 @@ import ru.training.karaf.model.*;
 public class UserRepoImpl implements UserRepo {
     private JpaTemplate template;
 
+
     public UserRepoImpl(JpaTemplate template) {
         this.template = template;
     }
@@ -68,12 +69,16 @@ public class UserRepoImpl implements UserRepo {
 
     @Override
     public void addBook(Long id, Book book) {
+
         template.tx(em -> {
             getById(id, em).ifPresent(userToUpdate -> {
                 userToUpdate.getBook().add(new BookDO(book));
                 em.merge(userToUpdate);
-            });
+            }
+
+            );
         });
+
     }
 
     @Override
@@ -120,7 +125,7 @@ public class UserRepoImpl implements UserRepo {
 
     private List<Long> getBooks(Long id, EntityManager em) {
         try {
-            return em.createNamedQuery(UserDO.GET_BOOKS,Long.class).setParameter(1, id).getResultList();
+            return em.createNamedQuery(UserDO.GET_BOOKS, Long.class).setParameter(1, id).getResultList();
         } catch (NoResultException e) {
             return Collections.emptyList();
         }
@@ -128,7 +133,7 @@ public class UserRepoImpl implements UserRepo {
 
     private long getRole(Long id, EntityManager em) {
         try {
-            return em.createNamedQuery(UserDO.GET_ROLES,Long.class).setParameter(1, id).getResultList().get(0);
+            return em.createNamedQuery(UserDO.GET_ROLES, Long.class).setParameter(1, id).getResultList().get(0);
         } catch (NoResultException e) {
             return Long.MIN_VALUE;
         }

@@ -20,7 +20,7 @@ public interface UserRestService {
 
     @GET
     @Path("/taking/{id}/{book_id}")
-    void takeBook(@PathParam("id") Long id, @PathParam("book_id") Long bookId);
+    String takeBook(@PathParam("id") Long id, @PathParam("book_id") Long bookId);
 
     @GET
     List<UserDTO> getAll();

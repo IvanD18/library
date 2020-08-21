@@ -22,7 +22,21 @@ public class BookDTO implements Book {
     public BookDTO() {
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
+    }
+
+    public void setCover(Long cover) {
+        this.cover = cover;
+    }
 
     public BookDTO(Book book) {
 
