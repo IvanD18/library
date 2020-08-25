@@ -109,7 +109,7 @@ public class BookRestServiceImpl implements BookRestService {
     @Override
     public void addAuthor(Long id, Long authorId) {
         if (ServiceUtils.isAdmin()) {
-        repo.addAuthor(id, authorRepo.get(authorId).get());
+            repo.addAuthor(id, authorRepo.get(authorId).get());
         } else {
             throw new NoPermissionsException(ServiceUtils.doItMessage());
         }
@@ -118,7 +118,6 @@ public class BookRestServiceImpl implements BookRestService {
     @Override
     public List<String> showComments(Long id) {
         return repo.showComments(id);
-
     }
 
     @Override

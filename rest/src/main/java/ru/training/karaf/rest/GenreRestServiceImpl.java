@@ -3,6 +3,7 @@ package ru.training.karaf.rest;
 import ru.training.karaf.repo.GenreRepo;
 import ru.training.karaf.rest.dto.GenreDTO;
 import ru.training.karaf.rest.dto.RoleDTO;
+import ru.training.karaf.rest.exception.NoPermissionsException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,22 +23,30 @@ public class GenreRestServiceImpl implements GenreRestService {
 
     @Override
     public void create(GenreDTO genre) {
-        repo.create(genre);
+        if (ServiceUtils.isAdmin()) {
+            repo.create(genre);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.doItMessage());
+        }
     }
 
     @Override
     public void update(Long id, GenreDTO genre) {
-
+        if (ServiceUtils.isAdmin()) {
+            repo.update(id, genre);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.updateMessage());
+        }
     }
 
     @Override
     public GenreDTO get(Long id) {
-        return null;
+        return new GenreDTO(repo.get(id).get());
     }
 
     @Override
     public GenreDTO getByName(String name) {
-        return null;
+        return new GenreDTO(repo.get(name).get());
     }
 
     @Override
