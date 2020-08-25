@@ -66,7 +66,7 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public List<UserDTO> getAll() {
-
+        SecurityUtils.getSubject().getPrincipal();
         List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
 
         return result;
@@ -98,7 +98,9 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public void delete(String login) {
+
         repo.delete(login);
+
     }
 
     @Override
@@ -109,6 +111,7 @@ public class UserRestServiceImpl implements UserRestService {
         BookDTO bookDTO = new BookDTO(book);
         bookDTO.setAvailability(true);
         bookRepo.update(book.getId(),bookDTO);
+        Subject currentUser = SecurityUtils.getSubject();
     }
 
     @Override

@@ -1,8 +1,11 @@
 package ru.training.karaf.rest;
 
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import ru.training.karaf.rest.dto.AuthorDTO;
 import ru.training.karaf.rest.dto.BookDTO;
-import ru.training.karaf.rest.dto.UserDTO;
 
 import java.util.List;
 import javax.ws.rs.*;
@@ -10,11 +13,14 @@ import javax.ws.rs.core.MediaType;
 
 
 
-@Path("author")
+@Path("/author")
+@Api(value = "/author")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public interface AuthorRestService {
 
+    @ApiOperation(value="get all authors", response = List.class)
+    @ApiResponse(code = 200,message = "Ok",response = List.class)
     @GET
     List<AuthorDTO> getAll();
 

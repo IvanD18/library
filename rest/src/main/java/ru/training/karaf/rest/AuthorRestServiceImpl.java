@@ -1,5 +1,7 @@
 package ru.training.karaf.rest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import ru.training.karaf.repo.AuthorRepo;
 import ru.training.karaf.repo.BookRepo;
 import ru.training.karaf.rest.dto.AuthorDTO;

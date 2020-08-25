@@ -1,18 +1,20 @@
 package ru.training.karaf.rest;
 
+
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import ru.training.karaf.rest.dto.BookDTO;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
+
 
 @Path("book")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public interface BookRestService {
+
 
     @GET
     List<BookDTO> getAll();

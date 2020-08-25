@@ -71,6 +71,8 @@
         <jaxrs:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
             <bean class="org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper"/>
+            <bean class="ru.training.karaf.rest.exceptionMapper.IncorrectCredentialsExceptionMapper"/>
+            <bean class="ru.training.karaf.rest.exceptionMapper.AuthenticationExceptionMapper"/>
         </jaxrs:providers>
     </jaxrs:server>
 </blueprint>
