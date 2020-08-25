@@ -52,7 +52,7 @@ public class UserRestServiceImpl implements UserRestService {
             }
             return resultList;
         } else {
-            throw new NoPermissionsException(ServiceUtils.getFirstName() + ", you do not have permission to view this page");
+            throw new NoPermissionsException(ServiceUtils.viewMessage());
         }
     }
 
@@ -79,7 +79,7 @@ public class UserRestServiceImpl implements UserRestService {
             List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
             return result;
         } else {
-            throw new NoPermissionsException(ServiceUtils.getFirstName() + ", you do not have permission to view this page");
+            throw new NoPermissionsException(ServiceUtils.viewMessage());
         }
     }
 
@@ -100,7 +100,7 @@ public class UserRestServiceImpl implements UserRestService {
         if (ServiceUtils.isAdmin() || (login == ServiceUtils.getLogin())) {
             repo.update(login, user);
         } else {
-            throw new NoPermissionsException("Sorry, " + ServiceUtils.getFirstName() + ", you do not have permissions to update it");
+            throw new NoPermissionsException(ServiceUtils.updateMessage());
         }
     }
 
@@ -111,7 +111,7 @@ public class UserRestServiceImpl implements UserRestService {
                     .orElseThrow(() -> new NotFoundException(Response.status(Response.Status.NOT_FOUND)
                             .type(MediaType.APPLICATION_JSON_TYPE).entity("User not found").build()));
         } else {
-            throw new NoPermissionsException(ServiceUtils.getFirstName() + ", you do not have permission to view this user");
+            throw new NoPermissionsException(ServiceUtils.viewMessage());
         }
     }
 
@@ -120,7 +120,7 @@ public class UserRestServiceImpl implements UserRestService {
         if (ServiceUtils.isAdmin() || (login == ServiceUtils.getLogin())) {
             repo.delete(login);
         } else {
-            throw new NoPermissionsException("Sorry, " + ServiceUtils.getFirstName() + ", you do not have permissions to delete it");
+            throw new NoPermissionsException(ServiceUtils.deleteMessage());
         }
     }
 
@@ -135,7 +135,7 @@ public class UserRestServiceImpl implements UserRestService {
             bookRepo.update(book.getId(), bookDTO);
             Subject currentUser = SecurityUtils.getSubject();
         } else {
-            throw new NoPermissionsException("Sorry, " + ServiceUtils.getFirstName() + ", you do not have permissions to do it");
+            throw new NoPermissionsException(ServiceUtils.doItMessage());
         }
     }
 

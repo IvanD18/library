@@ -38,16 +38,16 @@ public class AuthorRestServiceImpl implements AuthorRestService {
         if (ServiceUtils.isAdmin()) {
             repo.create(author);
         } else {
-            throw new NoPermissionsException(ServiceUtils.getFirstName() + ", you do not have permission to view this page");
+            throw new NoPermissionsException(ServiceUtils.doItMessage());
         }
     }
 
     @Override
     public void update(Long id, AuthorDTO author) {
         if (ServiceUtils.isAdmin()) {
-            //TODO сделать update
+            repo.update(id, author);
         } else {
-            throw new NoPermissionsException("Sorry, " + ServiceUtils.getFirstName() + ", you do not have permission to update it");
+            throw new NoPermissionsException(ServiceUtils.updateMessage());
         }
     }
 
@@ -61,7 +61,7 @@ public class AuthorRestServiceImpl implements AuthorRestService {
         if (ServiceUtils.isAdmin()) {
             repo.delete(id);
         } else {
-            throw new NoPermissionsException("Sorry, " + ServiceUtils.getFirstName() + ", you do not have permission to delete it");
+            throw new NoPermissionsException(ServiceUtils.deleteMessage());
         }
     }
 

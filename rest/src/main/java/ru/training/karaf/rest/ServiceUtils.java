@@ -39,4 +39,20 @@ public class ServiceUtils {
     public static boolean isUser() {
         return getRole() == "user" ? true : false;
     }
+
+    public static String deleteMessage() {
+        return "Sorry, " + ServiceUtils.getFirstName() + ", you do not have permission to delete it";
+    }
+
+    public static String updateMessage() {
+        return "Sorry, " + ServiceUtils.getFirstName() + ", you do not have permission to update it";
+    }
+
+    public static String viewMessage() {
+        return "Sorry, " + ServiceUtils.getFirstName() + ", you do not have permission to view it";
+    }
+
+    public static String doItMessage() {
+        return "Sorry, " + ServiceUtils.getFirstName() + ", you do not have permission to do it";
+    }
 }

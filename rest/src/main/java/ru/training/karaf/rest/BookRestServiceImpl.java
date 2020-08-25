@@ -10,6 +10,7 @@ import ru.training.karaf.rest.dto.AuthorDTO;
 import ru.training.karaf.rest.dto.BookDTO;
 import ru.training.karaf.rest.dto.GenreDTO;
 import ru.training.karaf.rest.dto.ReviewDTO;
+import ru.training.karaf.rest.exception.NoPermissionsException;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
@@ -53,19 +54,26 @@ public class BookRestServiceImpl implements BookRestService {
 
     @Override
     public void create(BookDTO book) {
-
-        List<AuthorDTO> list = new ArrayList<>();
-        for (Author author : book.getAuthor()) {
-            list.add(new AuthorDTO(author.getName(), author.getLastName(), authorRepo.get(author.getName(), author.getLastName()).get().getId()));
+        if (ServiceUtils.isAdmin()) {
+            List<AuthorDTO> list = new ArrayList<>();
+            for (Author author : book.getAuthor()) {
+                list.add(new AuthorDTO(author.getName(), author.getLastName(), authorRepo.get(author.getName(), author.getLastName()).get().getId()));
+            }
+            book.setAuthor(list);
+            book.setGenre(new GenreDTO(book.getGenre().getName(), genreRepo.get(book.getGenre().getName()).get().getId()));
+            repo.create(book);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.doItMessage());
         }
-        book.setAuthor(list);
-        book.setGenre(new GenreDTO(book.getGenre().getName(), genreRepo.get(book.getGenre().getName()).get().getId()));
-        repo.create(book);
     }
 
     @Override
     public void addCover(InputStream stream, Long id) {
-        repo.addImage(stream, id);
+        if (ServiceUtils.isAdmin()) {
+            repo.addImage(stream, id);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.doItMessage());
+        }
     }
 
     @Override
@@ -75,7 +83,11 @@ public class BookRestServiceImpl implements BookRestService {
 
     @Override
     public void update(Long id, BookDTO book) {
-
+        if (ServiceUtils.isAdmin()) {
+            repo.update(id, book);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.updateMessage());
+        }
     }
 
     @Override
@@ -87,17 +99,26 @@ public class BookRestServiceImpl implements BookRestService {
 
     @Override
     public void delete(Long id) {
-
+        if (ServiceUtils.isAdmin()) {
+            repo.delete(id);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.deleteMessage());
+        }
     }
 
     @Override
     public void addAuthor(Long id, Long authorId) {
+        if (ServiceUtils.isAdmin()) {
         repo.addAuthor(id, authorRepo.get(authorId).get());
+        } else {
+            throw new NoPermissionsException(ServiceUtils.doItMessage());
+        }
     }
 
     @Override
     public List<String> showComments(Long id) {
         return repo.showComments(id);
+
     }
 
     @Override
