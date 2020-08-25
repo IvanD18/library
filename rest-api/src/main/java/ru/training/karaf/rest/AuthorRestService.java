@@ -14,21 +14,20 @@ import javax.ws.rs.core.MediaType;
 
 
 @Path("/author")
-@Api(value = "/author")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public interface AuthorRestService {
 
-    @ApiOperation(value="get all authors", response = List.class)
-    @ApiResponse(code = 200,message = "Ok",response = List.class)
+
     @GET
     List<AuthorDTO> getAll();
 
     @POST
+    @Path("/create")
     void create(AuthorDTO author);
 
     @PUT
-    @Path("{id}")
+    @Path("/update/{id}")
     void update(@PathParam("id") Long id, AuthorDTO author);
 
     @GET
@@ -36,7 +35,7 @@ public interface AuthorRestService {
     AuthorDTO get(@PathParam("id") Long id);
 
     @DELETE
-    @Path("{id}")
+    @Path("/delete/{id}")
     void delete(@PathParam("id") Long id);
 
     @GET

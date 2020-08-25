@@ -16,10 +16,11 @@ public interface GenreRestService {
     List<GenreDTO> getAll();
 
     @POST
+    @Path("/create")
     void create(GenreDTO genre);
 
     @PUT
-    @Path("{id}")
+    @Path("/update/{id}")
     void update(@PathParam("id") Long id, GenreDTO genre);
 
     @GET
@@ -31,7 +32,7 @@ public interface GenreRestService {
     GenreDTO getByName(@QueryParam("name") String name);
 
     @DELETE
-    @Path("{id}")
+    @Path("/delete/{id}")
     void delete(@PathParam("id") Long id);
 
 //    @GET

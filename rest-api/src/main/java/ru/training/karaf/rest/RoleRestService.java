@@ -16,10 +16,11 @@ public interface RoleRestService {
     List<RoleDTO> getAll();
 
     @POST
+    @Path("/create")
     void create(RoleDTO role);
 
     @PUT
-    @Path("{id}")
+    @Path("/update/{id}")
     void update(@PathParam("id") Long id, RoleDTO role);
 
     @GET
@@ -31,7 +32,7 @@ public interface RoleRestService {
     RoleDTO getByName(@PathParam("name") String name);
 
     @DELETE
-    @Path("{id}")
+    @Path("/delete/{id}")
     void delete(@PathParam("id") Long id);
 
     @GET

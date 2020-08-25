@@ -24,11 +24,13 @@ public interface BookRestService {
     List<BookDTO> getAll(@PathParam("name") String name, @QueryParam("sz") int limit, @QueryParam("pg") int offset);
 
     @POST
+    @Path("/create")
     void create(BookDTO book);
 
     @POST
     @Produces(MediaType.MULTIPART_FORM_DATA)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/image/adding")
     void addCover(@Multipart("image") InputStream stream, @QueryParam("id") Long id);
 
     @GET
@@ -38,7 +40,7 @@ public interface BookRestService {
     byte[] showCover(@QueryParam("id") Long id);
 
     @PUT
-    @Path("{id}")
+    @Path("/update/{id}")
     void update(@PathParam("id") Long id, BookDTO book);
 
     @GET
@@ -46,7 +48,7 @@ public interface BookRestService {
     BookDTO get(@PathParam("id") Long id);
 
     @DELETE
-    @Path("{id}")
+    @Path("/delete/{id}")
     void delete(@PathParam("id") Long id);
 
     @GET

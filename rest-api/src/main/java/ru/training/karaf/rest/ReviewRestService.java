@@ -17,10 +17,11 @@ public interface ReviewRestService {
     List<ReviewDTO> getAll();
 
     @POST
+    @Path("/create")
     void create(ReviewDTO review);
 
     @PUT
-    @Path("{id}")
+    @Path("/update/{id}")
     void update(@PathParam("id") Long id, ReviewDTO review);
 
     @GET
@@ -28,6 +29,6 @@ public interface ReviewRestService {
     ReviewDTO get(@PathParam("id") Long id);
 
     @DELETE
-    @Path("{id}")
+    @Path("/delete/{id}")
     void delete(@PathParam("id") Long id);
 }
