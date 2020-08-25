@@ -7,6 +7,7 @@ import ru.training.karaf.rest.dto.BookDTO;
 import ru.training.karaf.rest.dto.ReviewDTO;
 import ru.training.karaf.rest.dto.RoleDTO;
 import ru.training.karaf.rest.dto.UserDTO;
+import ru.training.karaf.rest.exception.NoPermissionsException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,23 +31,35 @@ public class ReviewRestServiceImpl implements ReviewRestService {
 
     @Override
     public void create(ReviewDTO review) {
-        review.setUser(new UserDTO(userRepo.get(review.getUser().getId()).get()));
-        review.setBook(new BookDTO(bookRepo.get(review.getBook().getId()).get()));
-        repo.create(review);
+        if (ServiceUtils.isAdmin()) {
+            review.setUser(new UserDTO(userRepo.get(review.getUser().getId()).get()));
+            review.setBook(new BookDTO(bookRepo.get(review.getBook().getId()).get()));
+            repo.create(review);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.doItMessage());
+        }
     }
 
     @Override
     public void update(Long id, ReviewDTO review) {
-
+        if (ServiceUtils.isAdmin()) {
+            repo.update(id, review);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.updateMessage());
+        }
     }
 
     @Override
     public ReviewDTO get(Long id) {
-        return null;
+        return new ReviewDTO(repo.get(id).get());
     }
 
     @Override
     public void delete(Long id) {
-
+        if (ServiceUtils.isAdmin()) {
+            repo.delete(id);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.deleteMessage());
+        }
     }
 }

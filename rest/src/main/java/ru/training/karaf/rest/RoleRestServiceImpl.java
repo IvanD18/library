@@ -7,6 +7,7 @@ import ru.training.karaf.rest.dto.AuthorDTO;
 import ru.training.karaf.rest.dto.BookDTO;
 import ru.training.karaf.rest.dto.RoleDTO;
 import ru.training.karaf.rest.dto.UserDTO;
+import ru.training.karaf.rest.exception.NoPermissionsException;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -34,17 +35,26 @@ public class RoleRestServiceImpl implements RoleRestService {
 
     @Override
     public void create(RoleDTO role) {
-        repo.create(role);
+        if (ServiceUtils.isAdmin()) {
+            repo.create(role);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.doItMessage());
+        }
     }
 
     @Override
     public void update(Long id, RoleDTO role) {
 
+        if (ServiceUtils.isAdmin()) {
+            repo.update(id, role);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.updateMessage());
+        }
     }
 
     @Override
     public RoleDTO get(Long id) {
-        return null;
+        return new RoleDTO(repo.get(id).get());
     }
 
     @Override
@@ -56,7 +66,11 @@ public class RoleRestServiceImpl implements RoleRestService {
 
     @Override
     public void delete(Long id) {
-
+        if (ServiceUtils.isAdmin()) {
+            repo.delete(id);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.deleteMessage());
+        }
     }
 
     @Override
