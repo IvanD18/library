@@ -20,6 +20,7 @@ import ru.training.karaf.rest.dto.BookDTO;
 import ru.training.karaf.rest.dto.LoginfoDTO;
 import ru.training.karaf.rest.dto.RoleDTO;
 import ru.training.karaf.rest.dto.UserDTO;
+import ru.training.karaf.rest.exception.NoPermissionsException;
 
 public class UserRestServiceImpl implements UserRestService {
 
@@ -53,6 +54,7 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public String takeBook(Long id, Long bookId) {
+        if(ServiceUtils.isUser()){
         Book book = bookRepo.get(bookId).get();
         BookDTO bookDTO = new BookDTO(book);
         if(book.getAvailability()==true) {
@@ -61,15 +63,18 @@ public class UserRestServiceImpl implements UserRestService {
             repo.addBook(id, bookRepo.get(bookId).get());
             return "success";
         }
-        return "not available";
+        return "not available";}
+        else throw new NoPermissionsException("Please login as a user");
     }
 
     @Override
-    public List<UserDTO> getAll() {
-        SecurityUtils.getSubject().getPrincipal();
+    public List<UserDTO> getAll() throws NoPermissionsException {
+        if(ServiceUtils.isAdmin()){
         List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
-
-        return result;
+        return result;}
+        else {
+            throw new NoPermissionsException(ServiceUtils.getFirstName()+", you do not have permission to view this page");
+        }
     }
 
     @Override
@@ -86,32 +91,38 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public void update(String login, UserDTO user) {
-        repo.update(login, user);
+        if(ServiceUtils.isAdmin()||(login==ServiceUtils.getLogin())){
+        repo.update(login, user);}
+        else throw new NoPermissionsException("Sorry, "+ServiceUtils.getFirstName()+", you do not have permissions to update it");
     }
 
     @Override
     public UserDTO get(String login) {
+        if(ServiceUtils.isAdmin()){
         return repo.get(login).map(u -> new UserDTO(u))
                 .orElseThrow(() -> new NotFoundException(Response.status(Response.Status.NOT_FOUND)
-                        .type(MediaType.APPLICATION_JSON_TYPE).entity("User not found").build()));
+                        .type(MediaType.APPLICATION_JSON_TYPE).entity("User not found").build()));}
+        else throw new NoPermissionsException(ServiceUtils.getFirstName()+", you do not have permission to view this user");
     }
 
     @Override
     public void delete(String login) {
-
-        repo.delete(login);
-
+        if(ServiceUtils.isAdmin()||(login==ServiceUtils.getLogin())){
+        repo.delete(login);}
+        else throw new NoPermissionsException("Sorry, "+ServiceUtils.getFirstName()+", you do not have permissions to delete it");
     }
 
     @Override
     public void returnBook(Long id, Long bookId) {
+        if(ServiceUtils.isAdmin()){
         repo.removeBook(id, bookId);
         //TODO проверка возвращена ли книга?
         Book book = bookRepo.get(bookId).get();
         BookDTO bookDTO = new BookDTO(book);
         bookDTO.setAvailability(true);
         bookRepo.update(book.getId(),bookDTO);
-        Subject currentUser = SecurityUtils.getSubject();
+        Subject currentUser = SecurityUtils.getSubject();}
+        else throw new NoPermissionsException("Sorry, "+ServiceUtils.getFirstName()+", you do not have permissions to do it");
     }
 
     @Override

@@ -23,7 +23,7 @@ public interface UserRestService {
     String takeBook(@PathParam("id") Long id, @PathParam("book_id") Long bookId);
 
     @GET
-    List<UserDTO> getAll();
+    List<UserDTO> getAll() throws Exception;
 
     @POST
     @Path("/registration")

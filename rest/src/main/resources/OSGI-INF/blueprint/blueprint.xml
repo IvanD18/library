@@ -73,6 +73,7 @@
             <bean class="org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper"/>
             <bean class="ru.training.karaf.rest.exceptionMapper.IncorrectCredentialsExceptionMapper"/>
             <bean class="ru.training.karaf.rest.exceptionMapper.AuthenticationExceptionMapper"/>
+            <bean class="ru.training.karaf.rest.exceptionMapper.NoPermissionsExceptionMapper"/>
         </jaxrs:providers>
     </jaxrs:server>
 </blueprint>
