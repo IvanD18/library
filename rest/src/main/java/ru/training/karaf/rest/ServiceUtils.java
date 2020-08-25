@@ -20,8 +20,12 @@ public class ServiceUtils {
     public static String getRole() {
         return repo.get(SecurityUtils.getSubject().getPrincipal().toString()).get().getRole().getName();
     }
+
     public static String getLogin() {
         return repo.get(SecurityUtils.getSubject().getPrincipal().toString()).get().getLogin();
+    }
+    public static Long getId() {
+        return repo.get(SecurityUtils.getSubject().getPrincipal().toString()).get().getId();
     }
 
     public static String getFirstName() {
@@ -35,5 +39,4 @@ public class ServiceUtils {
     public static boolean isUser() {
         return getRole() == "user" ? true : false;
     }
-
 }

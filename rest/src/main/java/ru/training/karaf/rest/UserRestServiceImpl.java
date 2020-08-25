@@ -44,36 +44,42 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public List<BookDTO> showBooks(Long id) {
-        List<Long> list = repo.showBooks(id);
-        List<BookDTO> resultList = new ArrayList<>();
-        for (Long aLong : list) {
-            resultList.add(new BookDTO(bookRepo.get(aLong).get()));
+        if (ServiceUtils.isAdmin() || (id == ServiceUtils.getId())) {
+            List<Long> list = repo.showBooks(id);
+            List<BookDTO> resultList = new ArrayList<>();
+            for (Long aLong : list) {
+                resultList.add(new BookDTO(bookRepo.get(aLong).get()));
+            }
+            return resultList;
+        } else {
+            throw new NoPermissionsException(ServiceUtils.getFirstName() + ", you do not have permission to view this page");
         }
-        return resultList;
     }
 
     @Override
     public String takeBook(Long id, Long bookId) {
-        if(ServiceUtils.isUser()){
-        Book book = bookRepo.get(bookId).get();
-        BookDTO bookDTO = new BookDTO(book);
-        if(book.getAvailability()==true) {
-            bookDTO.setAvailability(false);
-            bookRepo.update(book.getId(),bookDTO);
-            repo.addBook(id, bookRepo.get(bookId).get());
-            return "success";
+        if (ServiceUtils.isUser()) {
+            Book book = bookRepo.get(bookId).get();
+            BookDTO bookDTO = new BookDTO(book);
+            if (book.getAvailability() == true) {
+                bookDTO.setAvailability(false);
+                bookRepo.update(book.getId(), bookDTO);
+                repo.addBook(id, bookRepo.get(bookId).get());
+                return "success";
+            }
+            return "not available";
+        } else {
+            throw new NoPermissionsException("Please login as a user");
         }
-        return "not available";}
-        else throw new NoPermissionsException("Please login as a user");
     }
 
     @Override
     public List<UserDTO> getAll() throws NoPermissionsException {
-        if(ServiceUtils.isAdmin()){
-        List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
-        return result;}
-        else {
-            throw new NoPermissionsException(ServiceUtils.getFirstName()+", you do not have permission to view this page");
+        if (ServiceUtils.isAdmin()) {
+            List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
+            return result;
+        } else {
+            throw new NoPermissionsException(ServiceUtils.getFirstName() + ", you do not have permission to view this page");
         }
     }
 
@@ -91,38 +97,46 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public void update(String login, UserDTO user) {
-        if(ServiceUtils.isAdmin()||(login==ServiceUtils.getLogin())){
-        repo.update(login, user);}
-        else throw new NoPermissionsException("Sorry, "+ServiceUtils.getFirstName()+", you do not have permissions to update it");
+        if (ServiceUtils.isAdmin() || (login == ServiceUtils.getLogin())) {
+            repo.update(login, user);
+        } else {
+            throw new NoPermissionsException("Sorry, " + ServiceUtils.getFirstName() + ", you do not have permissions to update it");
+        }
     }
 
     @Override
     public UserDTO get(String login) {
-        if(ServiceUtils.isAdmin()){
-        return repo.get(login).map(u -> new UserDTO(u))
-                .orElseThrow(() -> new NotFoundException(Response.status(Response.Status.NOT_FOUND)
-                        .type(MediaType.APPLICATION_JSON_TYPE).entity("User not found").build()));}
-        else throw new NoPermissionsException(ServiceUtils.getFirstName()+", you do not have permission to view this user");
+        if (ServiceUtils.isAdmin()) {
+            return repo.get(login).map(u -> new UserDTO(u))
+                    .orElseThrow(() -> new NotFoundException(Response.status(Response.Status.NOT_FOUND)
+                            .type(MediaType.APPLICATION_JSON_TYPE).entity("User not found").build()));
+        } else {
+            throw new NoPermissionsException(ServiceUtils.getFirstName() + ", you do not have permission to view this user");
+        }
     }
 
     @Override
     public void delete(String login) {
-        if(ServiceUtils.isAdmin()||(login==ServiceUtils.getLogin())){
-        repo.delete(login);}
-        else throw new NoPermissionsException("Sorry, "+ServiceUtils.getFirstName()+", you do not have permissions to delete it");
+        if (ServiceUtils.isAdmin() || (login == ServiceUtils.getLogin())) {
+            repo.delete(login);
+        } else {
+            throw new NoPermissionsException("Sorry, " + ServiceUtils.getFirstName() + ", you do not have permissions to delete it");
+        }
     }
 
     @Override
     public void returnBook(Long id, Long bookId) {
-        if(ServiceUtils.isAdmin()){
-        repo.removeBook(id, bookId);
-        //TODO проверка возвращена ли книга?
-        Book book = bookRepo.get(bookId).get();
-        BookDTO bookDTO = new BookDTO(book);
-        bookDTO.setAvailability(true);
-        bookRepo.update(book.getId(),bookDTO);
-        Subject currentUser = SecurityUtils.getSubject();}
-        else throw new NoPermissionsException("Sorry, "+ServiceUtils.getFirstName()+", you do not have permissions to do it");
+        if (ServiceUtils.isUser()) {
+            repo.removeBook(id, bookId);
+            //TODO проверка возвращена ли книга?
+            Book book = bookRepo.get(bookId).get();
+            BookDTO bookDTO = new BookDTO(book);
+            bookDTO.setAvailability(true);
+            bookRepo.update(book.getId(), bookDTO);
+            Subject currentUser = SecurityUtils.getSubject();
+        } else {
+            throw new NoPermissionsException("Sorry, " + ServiceUtils.getFirstName() + ", you do not have permissions to do it");
+        }
     }
 
     @Override

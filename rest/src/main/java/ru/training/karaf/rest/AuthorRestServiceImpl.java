@@ -8,6 +8,7 @@ import ru.training.karaf.rest.dto.AuthorDTO;
 import ru.training.karaf.rest.dto.BookDTO;
 import ru.training.karaf.rest.dto.RoleDTO;
 import ru.training.karaf.rest.dto.UserDTO;
+import ru.training.karaf.rest.exception.NoPermissionsException;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
@@ -27,28 +28,41 @@ public class AuthorRestServiceImpl implements AuthorRestService {
 
     @Override
     public List<AuthorDTO> getAll() {
+
         List<AuthorDTO> result = repo.getAll().stream().map(a -> new AuthorDTO(a)).collect(Collectors.toList());
         return result;
     }
 
     @Override
     public void create(AuthorDTO author) {
-        repo.create(author);
+        if (ServiceUtils.isAdmin()) {
+            repo.create(author);
+        } else {
+            throw new NoPermissionsException(ServiceUtils.getFirstName() + ", you do not have permission to view this page");
+        }
     }
 
     @Override
     public void update(Long id, AuthorDTO author) {
-
+        if (ServiceUtils.isAdmin()) {
+            //TODO сделать update
+        } else {
+            throw new NoPermissionsException("Sorry, " + ServiceUtils.getFirstName() + ", you do not have permission to update it");
+        }
     }
 
     @Override
     public AuthorDTO get(Long id) {
-        return null;
+        return new AuthorDTO(repo.get(id).get());
     }
 
     @Override
     public void delete(Long id) {
-
+        if (ServiceUtils.isAdmin()) {
+            repo.delete(id);
+        } else {
+            throw new NoPermissionsException("Sorry, " + ServiceUtils.getFirstName() + ", you do not have permission to delete it");
+        }
     }
 
     @Override
