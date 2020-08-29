@@ -33,7 +33,7 @@ public class ServiceUtils {
     }
 
     public static boolean isAdmin() {
-        return getRole() == "admin" ? true : false;
+        return getRole().equals( "admin") ? true : false;
     }
 
     public static boolean isUser() {

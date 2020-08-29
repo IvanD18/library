@@ -38,7 +38,7 @@ public class RoleRestServiceImpl implements RoleRestService {
         if (ServiceUtils.isAdmin()) {
             repo.create(role);
         } else {
-            throw new NoPermissionsException(ServiceUtils.doItMessage());
+           throw new NoPermissionsException(ServiceUtils.doItMessage());
         }
     }
 
