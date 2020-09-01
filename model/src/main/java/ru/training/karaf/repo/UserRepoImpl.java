@@ -12,7 +12,6 @@ import ru.training.karaf.model.*;
 public class UserRepoImpl implements UserRepo {
     private JpaTemplate template;
 
-
     public UserRepoImpl(JpaTemplate template) {
         this.template = template;
     }
@@ -72,13 +71,12 @@ public class UserRepoImpl implements UserRepo {
 
         template.tx(em -> {
             getById(id, em).ifPresent(userToUpdate -> {
-                userToUpdate.getBook().add(new BookDO(book));
-                em.merge(userToUpdate);
-            }
+                        userToUpdate.getBook().add(new BookDO(book));
+                        em.merge(userToUpdate);
+                    }
 
             );
         });
-
     }
 
     @Override
@@ -96,6 +94,56 @@ public class UserRepoImpl implements UserRepo {
         template.tx(em -> {
             removeBook(id, bookId, em);
         });
+    }
+
+    @Override
+    public List<? extends User> searchByAge(int age, String ratio, int limit, int offset, String address) {
+        return template.txExpr(em -> searchByAge(age, ratio, limit, offset, address, em));
+    }
+
+    public List<? extends User> searchByAge(int age, String ratio, int limit, int offset, String address, EntityManager em) {
+
+        if (ratio.equals("less")) {
+            try {
+                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE_LESS).setParameter(1, age).setParameter(2, address).setParameter(3, limit)
+                        .setParameter(4, offset)
+                        .getResultList();
+            } catch (NoResultException e) {
+                throw e;
+            }
+        }
+        if (ratio.equals("equally")) {
+            try {
+                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE).setParameter(1, age).setParameter(2, address).setParameter(3, limit).setParameter(
+                        4, offset)
+                        .getResultList();
+            } catch (NoResultException e) {
+                throw e;
+            }
+        } else {
+            try {
+                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE_MORE).setParameter(1, age).setParameter(2, address).setParameter(3, limit)
+                        .setParameter(4, offset)
+
+                        .getResultList();
+            } catch (NoResultException e) {
+                throw e;
+            }
+        }
+    }
+
+    @Override
+    public List<? extends User> searchByAddress(String address, int limit, int offset) {
+        return template.txExpr(em -> searchByAddress("%" + address + "%", limit, offset, em));
+    }
+
+    public List<? extends User> searchByAddress(String address, int limit, int offset, EntityManager em) {
+        try {
+            return em.createNamedQuery(UserDO.SEARCH_BY_ADDRESS).setParameter(1, address).setParameter(2, limit).setParameter(3, offset)
+                    .getResultList();
+        } catch (NoResultException e) {
+            throw e;
+        }
     }
 
     private Optional<UserDO> getByLogin(String login, EntityManager em) {

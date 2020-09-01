@@ -73,10 +73,26 @@ public class UserRestServiceImpl implements UserRestService {
         }
     }
 
+    //    @Override
+    //    public List<UserDTO> getAll() throws NoPermissionsException {
+    //        if (ServiceUtils.isAdmin()) {
+    //            List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
+    //            return result;
+    //        } else {
+    //            throw new NoPermissionsException(ServiceUtils.viewMessage());
+    //        }
+    //    }
+
     @Override
-    public List<UserDTO> getAll() throws NoPermissionsException {
+    public List<UserDTO> getAll(int age, String ratio, int limit, int offset, String address) throws Exception {
+        ratio = (ratio == null) ? "%" : ratio;
+        address = (address == null) ? "%" : address;
+        limit = (limit == 0) ? 10:limit;
+        offset = offset>0? limit * (offset - 1): 0;
+
         if (ServiceUtils.isAdmin()) {
-            List<UserDTO> result = repo.getAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
+            List<UserDTO> result = repo.searchByAge(age, ratio, limit, offset, address).stream().map(u -> new UserDTO(u)).collect(
+                    Collectors.toList());
             return result;
         } else {
             throw new NoPermissionsException(ServiceUtils.viewMessage());

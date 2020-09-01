@@ -12,7 +12,6 @@ import javax.persistence.*;
         @NamedQuery(name = UserDO.GET_BY_LOGIN, query = "SELECT u FROM UserDO AS u WHERE u.login = :login"),
         @NamedQuery(name = UserDO.GET_BY_ID, query = "SELECT u FROM UserDO AS u WHERE u.id = :id"),
         @NamedQuery(name = UserDO.COUNT_USERS, query = "SELECT COUNT(u) FROM UserDO AS u"),
-        @NamedQuery(name = UserDO.COUNT_USERS_WITH_AGE, query = "SELECT COUNT(u) FROM UserDO AS u WHERE u.age > :age")
 })
 @NamedNativeQueries({
         @NamedNativeQuery(name = UserDO.DELETE_BOOK, query = "DELETE FROM users_book WHERE userdo_id = :id AND book_id = :book_id"),
@@ -20,7 +19,23 @@ import javax.persistence.*;
         @NamedNativeQuery(name = UserDO.GET_ROLES, query = "select r.id from role as r where r.id in (select u.role_id from " +
                 "users as u where u.id = ?)"),
         @NamedNativeQuery(name = UserDO.GET_BOOKS, query = "select b.id from book as b where b.id in (select ub.book_id from " +
-                "users_book as ub where userdo_id = ?)")
+                "users_book as ub where userdo_id = ?)"),
+        @NamedNativeQuery(name = UserDO.SEARCH_BY_ADDRESS, query = "SELECT u.* FROM users AS u WHERE u.address LIKE ?1 limit ?2 offset " +
+                "?3", resultClass = UserDO.class),
+        @NamedNativeQuery(name = UserDO.COUNT_USERS_WITH_AGE, query = "SELECT count(u.*) FROM users AS u WHERE u.age > ?1 and u.address LIKE ?4 " +
+                "limit ?2 " +
+                "offset ?3",
+                resultClass
+                        = UserDO.class),
+        @NamedNativeQuery(name = UserDO.SEARCH_WITH_AGE_MORE,
+                query = "SELECT u.* FROM users AS u WHERE u.age > ?1 and u.address LIKE ?2 limit ?3 offset ?4",
+                resultClass = UserDO.class),
+        @NamedNativeQuery(name = UserDO.SEARCH_WITH_AGE_LESS,
+                query = "SELECT u.* FROM users AS u WHERE u.age < ?1 and u.address LIKE ?2 limit ?3 offset ?4",
+                resultClass = UserDO.class),
+        @NamedNativeQuery(name = UserDO.SEARCH_WITH_AGE,
+                query = "SELECT u.* FROM users AS u WHERE u.age = ?1 and u.address LIKE ?2 limit ?3 offset ?4",
+                resultClass = UserDO.class)
 })
 public class UserDO implements User {
     public static final String GET_ALL = "Users.getAll";
@@ -32,6 +47,10 @@ public class UserDO implements User {
     public static final String COUNT_USERS = "Users.countUsers";
     public static final String COUNT_BOOKS = "Users.countBooks";
     public static final String COUNT_USERS_WITH_AGE = "Users.countUsersWithAge";
+    public static final String SEARCH_BY_ADDRESS = "Users.searchByAddress";
+    public static final String SEARCH_WITH_AGE_MORE = "Users.searchWithAgeMore";
+    public static final String SEARCH_WITH_AGE_LESS = "Users.searchWithAgeLess";
+    public static final String SEARCH_WITH_AGE = "Users.searchWithAge";
 
     @Id
     @GeneratedValue
