@@ -19,8 +19,12 @@ import javax.ws.rs.core.MediaType;
 public interface AuthorRestService {
 
 
+//    @GET
+//    List<AuthorDTO> getAll();
+
     @GET
-    List<AuthorDTO> getAll();
+    List<AuthorDTO> getAll(@QueryParam("name") String name, @QueryParam("surname") String lastName, @QueryParam("sz") int limit,
+                           @QueryParam("pg") int offset);
 
     @POST
     @Path("/create")

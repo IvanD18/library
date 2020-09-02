@@ -26,6 +26,11 @@ public class AuthorRepoImpl implements AuthorRepo {
     }
 
     @Override
+    public List<? extends Author> getAll(String name, String lastName, int limit, int offset) {
+        return template.txExpr(em -> em.createNamedQuery(AuthorDO.SEARCH, AuthorDO.class).getResultList());
+    }
+
+    @Override
     public void create(Author author) {
         AuthorDO authorToCreate = new AuthorDO();
         authorToCreate.setName(author.getName());

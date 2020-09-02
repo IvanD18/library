@@ -12,12 +12,18 @@ import java.util.List;
         @NamedQuery(name = AuthorDO.GET_BOOKS, query = "SELECT b.id FROM AuthorDO AS a join BookDO as b WHERE a.id = :id"),
         @NamedQuery(name = AuthorDO.COUNT_AUTHORS, query = "SELECT COUNT(a) FROM AuthorDO AS a")
 })
+@NamedNativeQueries({
+        @NamedNativeQuery(name = AuthorDO.SEARCH, query = "SELECT a.* FROM author AS a WHERE a.author_name LIKE ?1 AND a.author_surname LIKE " +
+                "?2 " +
+                "LIMIT ?3 OFFSET ?4", resultClass = AuthorDO.class)
+})
 public class AuthorDO implements Author {
     public static final String GET_ALL = "Author.getAll";
     public static final String GET_BY_ID = "Author.getById";
     public static final String GET_BY_NAME = "Author.getByName";
     public static final String GET_BOOKS = "Author.getBooks";
     public static final String COUNT_AUTHORS = "Author.countAuthors";
+    public static final String SEARCH = "Author.search";
 
     @Id
     @GeneratedValue

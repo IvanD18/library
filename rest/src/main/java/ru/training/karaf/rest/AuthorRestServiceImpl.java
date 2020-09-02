@@ -26,10 +26,18 @@ public class AuthorRestServiceImpl implements AuthorRestService {
         this.bookRepo = bookRepo;
     }
 
-    @Override
-    public List<AuthorDTO> getAll() {
+//    @Override
+//    public List<AuthorDTO> getAll() {
+//
+//        List<AuthorDTO> result = repo.getAll().stream().map(a -> new AuthorDTO(a)).collect(Collectors.toList());
+//        return result;
+//    }
 
-        List<AuthorDTO> result = repo.getAll().stream().map(a -> new AuthorDTO(a)).collect(Collectors.toList());
+    @Override
+    public List<AuthorDTO> getAll(String name, String lastName, int limit, int offset) {
+        limit = (limit == 0) ? 10:limit;
+        offset = offset>0? limit * (offset - 1): 0;
+        List<AuthorDTO> result = repo.getAll(name, lastName, limit, offset).stream().map(a -> new AuthorDTO(a)).collect(Collectors.toList());
         return result;
     }
 

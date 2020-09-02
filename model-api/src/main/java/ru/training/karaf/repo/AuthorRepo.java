@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface AuthorRepo {
     List<? extends Author> getAll();
 
+    List<? extends Author> getAll(String name, String lastName, int limit, int offset);
+
     void create(Author author);
 
     void update(Long id, Author author);
@@ -23,4 +25,6 @@ public interface AuthorRepo {
     List<Long> getBooks(Long id);
 
     void delete(Long id);
+
+
 }

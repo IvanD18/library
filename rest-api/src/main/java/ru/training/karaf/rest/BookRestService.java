@@ -20,7 +20,7 @@ public interface BookRestService {
     List<BookDTO> getAll();
 
     @GET
-    @Path("genre/{name}")
+    @Path("{name}")
     List<BookDTO> getAll(@PathParam("name") String name, @QueryParam("sz") int limit, @QueryParam("pg") int offset);
 
     @POST
