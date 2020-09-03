@@ -13,7 +13,7 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public interface GenreRestService {
     @GET
-    List<GenreDTO> getAll();
+    List<GenreDTO> getAll(@QueryParam("genre") String name, @QueryParam("sz") int limit, @QueryParam("pg") int offset);
 
     @POST
     @Path("/create")
@@ -28,14 +28,14 @@ public interface GenreRestService {
     GenreDTO get(@QueryParam("id") Long id);
 
     @GET
-    @Path("{name}")
+    @Path("/name")
     GenreDTO getByName(@QueryParam("name") String name);
 
     @DELETE
     @Path("/delete/{id}")
     void delete(@PathParam("id") Long id);
 
-//    @GET
-//    @Path("//{name}")
-//    List<GenreDTO> showWithType(@PathParam("name") String name);
+    //    @GET
+    //    @Path("//{name}")
+    //    List<GenreDTO> showWithType(@PathParam("name") String name);
 }

@@ -16,8 +16,11 @@ public class GenreRestServiceImpl implements GenreRestService {
     }
 
     @Override
-    public List<GenreDTO> getAll() {
-        List<GenreDTO> result = repo.getAll().stream().map(g -> new GenreDTO(g)).collect(Collectors.toList());
+    public List<GenreDTO> getAll(String name, int limit, int offset) {
+        name = name == null ? "%" : name;
+        limit = (limit == 0) ? 10:limit;
+        offset = offset>0? limit * (offset - 1): 0;
+        List<GenreDTO> result = repo.getAll(name, limit, offset).stream().map(g -> new GenreDTO(g)).collect(Collectors.toList());
         return result;
     }
 

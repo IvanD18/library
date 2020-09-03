@@ -11,7 +11,7 @@ import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 
-public class GenreRepoImpl  implements GenreRepo{
+public class GenreRepoImpl implements GenreRepo {
     private JpaTemplate template;
 
     public GenreRepoImpl(JpaTemplate template) {
@@ -21,6 +21,12 @@ public class GenreRepoImpl  implements GenreRepo{
     @Override
     public List<? extends Genre> getAll() {
         return template.txExpr(em -> em.createNamedQuery(GenreDO.GET_ALL, GenreDO.class).getResultList());
+    }
+
+    @Override
+    public List<? extends Genre> getAll(String name, int limit, int offset) {
+        return template.txExpr(em -> em.createNamedQuery(GenreDO.SEARCH).setParameter(1, name).setParameter(2, limit).setParameter(3, offset)
+                .getResultList());
     }
 
     @Override

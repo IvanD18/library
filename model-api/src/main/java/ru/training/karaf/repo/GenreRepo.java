@@ -10,6 +10,8 @@ public interface GenreRepo {
 
     List<? extends Genre> getAll();
 
+    List<? extends Genre> getAll(String name, int limit, int offset);
+
     void create(Genre genre);
 
     void update(Long id, Genre genre);
