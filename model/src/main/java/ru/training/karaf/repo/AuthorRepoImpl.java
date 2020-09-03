@@ -27,7 +27,8 @@ public class AuthorRepoImpl implements AuthorRepo {
 
     @Override
     public List<? extends Author> getAll(String name, String lastName, int limit, int offset) {
-        return template.txExpr(em -> em.createNamedQuery(AuthorDO.SEARCH, AuthorDO.class).getResultList());
+        return template.txExpr(em -> em.createNamedQuery(AuthorDO.SEARCH, AuthorDO.class).setParameter(1, name).setParameter(2, lastName)
+                .setParameter(3, limit).setParameter(4, offset).getResultList());
     }
 
     @Override
@@ -66,7 +67,7 @@ public class AuthorRepoImpl implements AuthorRepo {
 
     @Override
     public Optional<? extends Author> get(String name, String surname) {
-        return template.txExpr(em -> getByName(name,surname, em));
+        return template.txExpr(em -> getByName(name, surname, em));
     }
 
     @Override
@@ -82,9 +83,9 @@ public class AuthorRepoImpl implements AuthorRepo {
         }
     }
 
-    public Optional<AuthorDO> getByName(String name, String surname,EntityManager em){
+    public Optional<AuthorDO> getByName(String name, String surname, EntityManager em) {
         try {
-            return Optional.of(em.createNamedQuery(AuthorDO.GET_BY_NAME, AuthorDO.class).setParameter("name", name).setParameter("lastName",surname)
+            return Optional.of(em.createNamedQuery(AuthorDO.GET_BY_NAME, AuthorDO.class).setParameter("name", name).setParameter("lastName", surname)
                     .getSingleResult());
         } catch (NoResultException e) {
             return Optional.empty();

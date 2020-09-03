@@ -37,6 +37,8 @@ public class AuthorRestServiceImpl implements AuthorRestService {
     public List<AuthorDTO> getAll(String name, String lastName, int limit, int offset) {
         limit = (limit == 0) ? 10:limit;
         offset = offset>0? limit * (offset - 1): 0;
+        name= name ==null? "%":name;
+        lastName= lastName ==null? "%":lastName;
         List<AuthorDTO> result = repo.getAll(name, lastName, limit, offset).stream().map(a -> new AuthorDTO(a)).collect(Collectors.toList());
         return result;
     }
