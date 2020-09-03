@@ -24,8 +24,13 @@ public class ReviewRestServiceImpl implements ReviewRestService {
     }
 
     @Override
-    public List<ReviewDTO> getAll() {
-        List<ReviewDTO> result = repo.getAll().stream().map(r -> new ReviewDTO(r)).collect(Collectors.toList());
+    public List<ReviewDTO> getAll(int rating, String title, String login, int limit, int offset, String mode) {
+        limit = (limit == 0) ? 10:limit;
+        offset = offset>0? limit * (offset - 1): 0;
+        title= title ==null? "%":title;
+        login= login ==null? "%":login;
+        mode= mode ==null? "":mode;
+        List<ReviewDTO> result = repo.getAll(rating, title, login, limit, offset, mode).stream().map(r -> new ReviewDTO(r)).collect(Collectors.toList());
         return result;
     }
 

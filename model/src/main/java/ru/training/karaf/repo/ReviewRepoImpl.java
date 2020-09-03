@@ -22,6 +22,24 @@ public class ReviewRepoImpl implements ReviewRepo {
     }
 
     @Override
+    public List<? extends Review> getAll(int rating, String title, String login, int limit, int offset, String mode) {
+        if(mode == "equally"){
+        return template.txExpr(em -> em.createNamedQuery(ReviewDO.SEARCH_WITH_EQUAL_RATING, ReviewDO.class).setParameter(1, rating).setParameter(2,
+                title)
+                .setParameter(3, login).setParameter(4, limit).setParameter(5, offset).getResultList());}
+        if(mode == "less"){
+            return template.txExpr(em -> em.createNamedQuery(ReviewDO.SEARCH_WITH_LESS_RATING, ReviewDO.class).setParameter(1, rating).setParameter(2,
+                    title)
+                    .setParameter(3, login).setParameter(4, limit).setParameter(5, offset).getResultList());
+        }
+        else{
+            return template.txExpr(em -> em.createNamedQuery(ReviewDO.SEARCH_WITH_MORE_RATING, ReviewDO.class).setParameter(1, rating).setParameter(2,
+                    title)
+                    .setParameter(3, login).setParameter(4, limit).setParameter(5, offset).getResultList());
+        }
+    }
+
+    @Override
     public void create(Review review) {
         ReviewDO reviewToCreate = new ReviewDO();
         reviewToCreate.setComment(review.getComment());

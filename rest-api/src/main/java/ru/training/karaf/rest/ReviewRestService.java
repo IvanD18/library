@@ -1,8 +1,5 @@
 package ru.training.karaf.rest;
 
-
-
-
 import ru.training.karaf.rest.dto.ReviewDTO;
 
 import javax.ws.rs.*;
@@ -14,7 +11,10 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public interface ReviewRestService {
     @GET
-    List<ReviewDTO> getAll();
+    List<ReviewDTO> getAll(
+            @QueryParam("rating") int rating, @QueryParam("title") String title, @QueryParam("login") String login, @QueryParam("sz") int limit,
+            @QueryParam("pg") int offset, @QueryParam("mode") String mode
+    );
 
     @POST
     @Path("/create")

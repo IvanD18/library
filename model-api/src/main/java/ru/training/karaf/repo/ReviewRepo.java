@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface ReviewRepo {
     List<? extends Review> getAll();
 
+    List<? extends Review> getAll(int rating, String title, String login, int limit, int offset,String mode);
+
     void create(Review Review);
 
     void update(Long id, Review review);

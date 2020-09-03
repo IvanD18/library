@@ -11,11 +11,26 @@ import javax.xml.namespace.QName;
         @NamedQuery(name = ReviewDO.COUNT_REVIEWS, query = "SELECT COUNT(r) FROM ReviewDO AS r"),
         @NamedQuery(name = ReviewDO.COUNT_REVIEWS_WITH_RATING, query = "SELECT COUNT(r) FROM ReviewDO AS r WHERE r.rating > :rating")
 })
+@NamedNativeQueries({
+        @NamedNativeQuery(name = ReviewDO.SEARCH_WITH_MORE_RATING,
+                query = "SELECT r.* FROM review AS r WHERE r.book_rating > ?1 AND r.book_id IN (SELECT b.id FROM book AS b WHERE b.title LIKE ?2) " +
+                        "AND r.user_id IN (SELECT u.id FROM users AS u WHERE u.login LIKE ?3) LIMIT ?4 OFFSET ?5", resultClass = ReviewDO.class),
+        @NamedNativeQuery(name = ReviewDO.SEARCH_WITH_LESS_RATING,
+                query = "SELECT r.* FROM review AS r WHERE r.book_rating < ?1 AND r.book_id IN (SELECT b.id FROM book AS b WHERE b.title LIKE ?2) " +
+                        "AND r.user_id IN (SELECT u.id FROM users AS u WHERE u.login LIKE ?3) LIMIT ?4 OFFSET ?5", resultClass = ReviewDO.class),
+        @NamedNativeQuery(name = ReviewDO.SEARCH_WITH_EQUAL_RATING,
+                query = "SELECT r.* FROM review AS r WHERE r.book_rating = ?1 AND r.book_id IN (SELECT b.id FROM book AS b WHERE b.title LIKE ?2) " +
+                        "AND r.user_id IN (SELECT u.id FROM users AS u WHERE u.login LIKE ?3) LIMIT ?4 OFFSET ?5", resultClass = ReviewDO.class)
+})
+
 public class ReviewDO implements Review {
     public static final String GET_ALL = "Review.getAll";
     public static final String GET_BY_ID = "Review.getById";
     public static final String COUNT_REVIEWS = "Review.countReviews";
     public static final String COUNT_REVIEWS_WITH_RATING = "Review.countReviewsWithRating";
+    public static final String SEARCH_WITH_MORE_RATING = "Review.searchMore";
+    public static final String SEARCH_WITH_LESS_RATING = "Review.searchLess";
+    public static final String SEARCH_WITH_EQUAL_RATING = "Review.searchEqual";
 
     @Id
     @GeneratedValue
