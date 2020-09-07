@@ -27,7 +27,7 @@ public class ReviewRestServiceImpl implements ReviewRestService {
     public List<ReviewDTO> getAll(int rating, String title, String login, int limit, int offset, String mode) {
         limit = (limit == 0) ? 10:limit;
         offset = offset>0? limit * (offset - 1): 0;
-        title= title ==null? "%":title;
+        title= title ==null? "%":"%"+title+"%";
         login= login ==null? "%":login;
         mode= mode ==null? "":mode;
         List<ReviewDTO> result = repo.getAll(rating, title, login, limit, offset, mode).stream().map(r -> new ReviewDTO(r)).collect(Collectors.toList());
@@ -37,8 +37,8 @@ public class ReviewRestServiceImpl implements ReviewRestService {
     @Override
     public void create(ReviewDTO review) {
         if (ServiceUtils.isAdmin()) {
-            review.setUser(new UserDTO(userRepo.get(review.getUser().getId()).get()));
-            review.setBook(new BookDTO(bookRepo.get(review.getBook().getId()).get()));
+            review.setUser(new UserDTO(userRepo.get(review.getUser().getLogin()).get()));
+            review.setBook(new BookDTO(bookRepo.getByTitle(review.getBook().getTitle()).get()));
             repo.create(review);
         } else {
             throw new NoPermissionsException(ServiceUtils.doItMessage());

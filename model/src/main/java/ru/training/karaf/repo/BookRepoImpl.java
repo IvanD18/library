@@ -168,6 +168,11 @@ public class BookRepoImpl implements BookRepo {
     }
 
     @Override
+    public Optional<? extends Book> getByTitle(String title) {
+        return  Optional.of(template.txExpr(em -> searchByTitle(title , 1, 0, em)).get(0));
+    }
+
+    @Override
     public List<BookDO> searchByTitle(String title, int limit, int offset) {
         return template.txExpr(em -> searchByTitle("%" + title + "%", limit, offset, em));
     }

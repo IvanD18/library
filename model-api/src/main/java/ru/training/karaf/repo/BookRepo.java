@@ -33,6 +33,8 @@ public interface BookRepo {
 
     double averageRating(Long id);
 
+    Optional<? extends Book> getByTitle(String title);
+
     List<? extends Book> searchByTitle(String title, int limit, int offset);
 
     List<? extends Book> searchByGenre(String name, int limit, int offset);
