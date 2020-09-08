@@ -26,9 +26,31 @@ public class AuthorRepoImpl implements AuthorRepo {
     }
 
     @Override
-    public List<? extends Author> getAll(String name, String lastName, int limit, int offset) {
-        return template.txExpr(em -> em.createNamedQuery(AuthorDO.SEARCH, AuthorDO.class).setParameter(1, name).setParameter(2, lastName)
-                .setParameter(3, limit).setParameter(4, offset).getResultList());
+    public List<? extends Author> getAll(String name, String lastName, int limit, int offset, String sortBy, String order) {
+
+        if (sortBy.equals("name") && order.equals("asc")) {
+            return template.txExpr(em -> em.createNamedQuery(AuthorDO.SEARCH_BY_NAME_ACS, AuthorDO.class).setParameter(1, name).setParameter(2,
+                    lastName)
+                    .setParameter(3, limit).setParameter(4, offset).getResultList());
+        }
+        if (sortBy.equals("name") && order.equals( "desc")) {
+            return template.txExpr(em -> em.createNamedQuery(AuthorDO.SEARCH_BY_NAME_DESC, AuthorDO.class).setParameter(1, name).setParameter(2,
+                    lastName)
+                    .setParameter(3, limit).setParameter(4, offset).getResultList());
+        }
+        if (sortBy.equals("surname") && order.equals("asc")) {
+            return template.txExpr(em -> em.createNamedQuery(AuthorDO.SEARCH_BY_LASTNAME_ASC, AuthorDO.class).setParameter(1, name).setParameter(2,
+                    lastName)
+                    .setParameter(3, limit).setParameter(4, offset).getResultList());
+        }
+        if (sortBy.equals("surname") && order.equals("desc")) {
+            return template.txExpr(em -> em.createNamedQuery(AuthorDO.SEARCH_BY_LASTNAME_DESC, AuthorDO.class).setParameter(1, name).setParameter(2,
+                    lastName)
+                    .setParameter(3, limit).setParameter(4, offset).getResultList());
+        } else {
+            return template.txExpr(em -> em.createNamedQuery(AuthorDO.SEARCH, AuthorDO.class).setParameter(1, name).setParameter(2, lastName)
+                    .setParameter(3, limit).setParameter(4, offset).getResultList());
+        }
     }
 
     @Override

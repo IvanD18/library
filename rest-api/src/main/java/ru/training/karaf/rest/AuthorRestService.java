@@ -24,7 +24,7 @@ public interface AuthorRestService {
 
     @GET
     List<AuthorDTO> getAll(@QueryParam("name") String name, @QueryParam("surname") String lastName, @QueryParam("sz") int limit,
-                           @QueryParam("pg") int offset);
+                           @QueryParam("pg") int offset, @QueryParam("sort") String sortBy, @QueryParam("order") String order);
 
     @POST
     @Path("/create")

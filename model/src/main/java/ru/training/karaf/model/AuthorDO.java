@@ -13,9 +13,27 @@ import java.util.List;
         @NamedQuery(name = AuthorDO.COUNT_AUTHORS, query = "SELECT COUNT(a) FROM AuthorDO AS a")
 })
 @NamedNativeQueries({
-        @NamedNativeQuery(name = AuthorDO.SEARCH, query = "SELECT a.* FROM author AS a WHERE a.author_name LIKE ?1 AND a.author_surname LIKE " +
-                "?2 " +
-                "LIMIT ?3 OFFSET ?4", resultClass = AuthorDO.class)
+        @NamedNativeQuery(name = AuthorDO.SEARCH_BY_NAME_ACS, query = AuthorDO.SEARCH_QUERY +
+                "ORDER BY author_name ASC"
+                + AuthorDO.LIMIT_OFFSET, resultClass = AuthorDO.class),
+
+        @NamedNativeQuery(name = AuthorDO.SEARCH_BY_NAME_DESC, query = AuthorDO.SEARCH_QUERY +
+                "ORDER BY author_name DESC"
+                + AuthorDO.LIMIT_OFFSET, resultClass = AuthorDO.class),
+
+        @NamedNativeQuery(name = AuthorDO.SEARCH_BY_LASTNAME_ASC, query = AuthorDO.SEARCH_QUERY +
+                "ORDER BY author_surname ASC"
+                + AuthorDO.LIMIT_OFFSET, resultClass =
+                AuthorDO.class),
+
+        @NamedNativeQuery(name = AuthorDO.SEARCH_BY_LASTNAME_DESC, query = AuthorDO.SEARCH_QUERY +
+                "ORDER BY author_surname DESC"
+                + AuthorDO.LIMIT_OFFSET,
+                resultClass = AuthorDO.class),
+
+        @NamedNativeQuery(name = AuthorDO.SEARCH, query = AuthorDO.SEARCH_QUERY
+                + AuthorDO.LIMIT_OFFSET,
+                resultClass = AuthorDO.class),
 })
 public class AuthorDO implements Author {
     public static final String GET_ALL = "Author.getAll";
@@ -24,6 +42,13 @@ public class AuthorDO implements Author {
     public static final String GET_BOOKS = "Author.getBooks";
     public static final String COUNT_AUTHORS = "Author.countAuthors";
     public static final String SEARCH = "Author.search";
+    public static final String SEARCH_BY_NAME_ACS = "Author.searchNameAsc";
+    public static final String SEARCH_BY_NAME_DESC = "Author.searchNameDesc";
+    public static final String SEARCH_BY_LASTNAME_ASC = "Author.searchLastnameAsc";
+    public static final String SEARCH_BY_LASTNAME_DESC = "Author.searchLastnameDesc";
+
+    public static final String SEARCH_QUERY = " SELECT a.* FROM author AS a WHERE a.author_name LIKE ?1 AND a.author_surname LIKE ?2 ";
+    public static final String LIMIT_OFFSET = " LIMIT ?3 OFFSET ?4 ";
 
     @Id
     @GeneratedValue

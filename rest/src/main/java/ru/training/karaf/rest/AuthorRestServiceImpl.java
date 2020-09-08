@@ -34,12 +34,12 @@ public class AuthorRestServiceImpl implements AuthorRestService {
 //    }
 
     @Override
-    public List<AuthorDTO> getAll(String name, String lastName, int limit, int offset) {
+    public List<AuthorDTO> getAll(String name, String lastName, int limit, int offset, String sortBy,String order) {
         limit = (limit == 0) ? 10:limit;
         offset = offset>0? limit * (offset - 1): 0;
         name= name ==null? "%":name;
         lastName= lastName ==null? "%":lastName;
-        List<AuthorDTO> result = repo.getAll(name, lastName, limit, offset).stream().map(a -> new AuthorDTO(a)).collect(Collectors.toList());
+        List<AuthorDTO> result = repo.getAll(name, lastName, limit, offset, sortBy, order).stream().map(a -> new AuthorDTO(a)).collect(Collectors.toList());
         return result;
     }
 
