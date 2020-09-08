@@ -28,13 +28,16 @@ import javax.persistence.*;
                 resultClass
                         = UserDO.class),
         @NamedNativeQuery(name = UserDO.SEARCH_WITH_AGE_MORE,
-                query = "SELECT u.* FROM users AS u WHERE u.age > ?1 and u.address LIKE ?2 limit ?3 offset ?4",
+                query = "SELECT u.* FROM users AS u WHERE u.age > ?1 and u.address LIKE ?2 AND u.role_id in (SELECT r.id FROM role as r WHERE r" +
+                        ".role_name LIKE ?3) limit ?4 offset ?5",
                 resultClass = UserDO.class),
         @NamedNativeQuery(name = UserDO.SEARCH_WITH_AGE_LESS,
-                query = "SELECT u.* FROM users AS u WHERE u.age < ?1 and u.address LIKE ?2 limit ?3 offset ?4",
+                query = "SELECT u.* FROM users AS u WHERE u.age < ?1 and u.address LIKE ?2 AND u.role_id in (SELECT r.id FROM role as r WHERE r" +
+                        ".role_name LIKE ?3) limit ?4 offset ?5",
                 resultClass = UserDO.class),
         @NamedNativeQuery(name = UserDO.SEARCH_WITH_AGE,
-                query = "SELECT u.* FROM users AS u WHERE u.age = ?1 and u.address LIKE ?2 limit ?3 offset ?4",
+                query = "SELECT u.* FROM users AS u WHERE u.age = ?1 AND u.address LIKE ?2 AND u.role_id in (SELECT r.id FROM role as r WHERE " +
+                        "r.role_name LIKE ?3) limit ?4 offset ?5",
                 resultClass = UserDO.class)
 })
 public class UserDO implements User {

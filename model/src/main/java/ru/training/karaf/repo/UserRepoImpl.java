@@ -97,16 +97,17 @@ public class UserRepoImpl implements UserRepo {
     }
 
     @Override
-    public List<? extends User> searchByAge(int age, String ratio, int limit, int offset, String address) {
-        return template.txExpr(em -> searchByAge(age, ratio, limit, offset, address, em));
+    public List<? extends User> searchByAge(int age, String ratio, String role, int limit, int offset, String address) {
+        return template.txExpr(em -> searchByAge(age, ratio, role, limit, offset, address, em));
     }
 
-    public List<? extends User> searchByAge(int age, String ratio, int limit, int offset, String address, EntityManager em) {
+    public List<? extends User> searchByAge(int age, String ratio, String role, int limit, int offset, String address, EntityManager em) {
 
         if (ratio.equals("less")) {
             try {
-                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE_LESS).setParameter(1, age).setParameter(2, address).setParameter(3, limit)
-                        .setParameter(4, offset)
+                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE_LESS).setParameter(1, age).setParameter(2, address).setParameter(3, role)
+                        .setParameter(4, limit)
+                        .setParameter(5, offset)
                         .getResultList();
             } catch (NoResultException e) {
                 throw e;
@@ -114,17 +115,18 @@ public class UserRepoImpl implements UserRepo {
         }
         if (ratio.equals("equally")) {
             try {
-                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE).setParameter(1, age).setParameter(2, address).setParameter(3, limit).setParameter(
-                        4, offset)
+                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE).setParameter(1, age).setParameter(2, address).setParameter(3, role)
+                        .setParameter(4, limit)
+                        .setParameter(5, offset)
                         .getResultList();
             } catch (NoResultException e) {
                 throw e;
             }
         } else {
             try {
-                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE_MORE).setParameter(1, age).setParameter(2, address).setParameter(3, limit)
-                        .setParameter(4, offset)
-
+                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE_MORE).setParameter(1, age).setParameter(2, address).setParameter(3, role)
+                        .setParameter(4, limit)
+                        .setParameter(5, offset)
                         .getResultList();
             } catch (NoResultException e) {
                 throw e;

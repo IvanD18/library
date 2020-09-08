@@ -25,10 +25,9 @@ public interface UserRepo {
 
     Long showRole(Long id);
 
-    void removeBook(Long id,Long bookId);
+    void removeBook(Long id, Long bookId);
 
-    List<? extends User> searchByAge(int age, String ratio, int limit, int offset, String address);
+    List<? extends User> searchByAge(int age, String ratio, String role, int limit, int offset, String address);
 
     List<? extends User> searchByAddress(String address, int limit, int offset);
-
 }

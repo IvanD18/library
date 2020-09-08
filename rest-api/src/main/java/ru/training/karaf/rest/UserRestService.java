@@ -27,7 +27,8 @@ public interface UserRestService {
 
     @GET
     List<UserDTO> getAll(
-            @QueryParam("age") int age, @QueryParam("ratio") String ratio, @QueryParam("sz") int limit, @QueryParam("pg") int offset,
+            @QueryParam("age") int age, @QueryParam("ratio") String ratio,@QueryParam("role") String role, @QueryParam("sz") int limit, @QueryParam(
+                    "pg") int offset,
             @QueryParam("address") String address
     ) throws Exception;
 

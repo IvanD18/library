@@ -84,14 +84,15 @@ public class UserRestServiceImpl implements UserRestService {
     //    }
 
     @Override
-    public List<UserDTO> getAll(int age, String ratio, int limit, int offset, String address) throws Exception {
+    public List<UserDTO> getAll(int age, String ratio, String role, int limit, int offset, String address) throws Exception {
         ratio = (ratio == null) ? "%" : ratio;
         address = (address == null) ? "%" : address;
-        limit = (limit == 0) ? 10:limit;
-        offset = offset>0? limit * (offset - 1): 0;
+        limit = (limit == 0) ? 10 : limit;
+        offset = offset > 0 ? limit * (offset - 1) : 0;
+        role = role == null ? "%" : role;
 
         if (ServiceUtils.isAdmin()) {
-            List<UserDTO> result = repo.searchByAge(age, ratio, limit, offset, address).stream().map(u -> new UserDTO(u)).collect(
+            List<UserDTO> result = repo.searchByAge(age, ratio, role, limit, offset, address).stream().map(u -> new UserDTO(u)).collect(
                     Collectors.toList());
             return result;
         } else {
