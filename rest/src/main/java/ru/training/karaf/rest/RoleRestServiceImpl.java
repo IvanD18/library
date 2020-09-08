@@ -28,8 +28,11 @@ public class RoleRestServiceImpl implements RoleRestService {
     }
 
     @Override
-    public List<RoleDTO> getAll() {
-        List<RoleDTO> result = repo.getAll().stream().map(r -> new RoleDTO(r)).collect(Collectors.toList());
+    public List<RoleDTO> getAll(String name, int limit, int offset) {
+        name = name == null ? "%" : name;
+        limit = (limit == 0) ? 10 : limit;
+        offset = offset > 0 ? limit * (offset - 1) : 0;
+        List<RoleDTO> result = repo.getAll(name, limit, offset).stream().map(r -> new RoleDTO(r)).collect(Collectors.toList());
         return result;
     }
 
@@ -38,7 +41,7 @@ public class RoleRestServiceImpl implements RoleRestService {
         if (ServiceUtils.isAdmin()) {
             repo.create(role);
         } else {
-           throw new NoPermissionsException(ServiceUtils.doItMessage());
+            throw new NoPermissionsException(ServiceUtils.doItMessage());
         }
     }
 

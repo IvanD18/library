@@ -13,7 +13,10 @@ import java.util.List;
         @NamedQuery(name = RoleDO.COUNT_ROLES, query = "SELECT COUNT(r) FROM RoleDO AS r")
 
 })
-
+@NamedNativeQueries({
+        @NamedNativeQuery(name = RoleDO.SEARCH, query = "SELECT r.* FROM role AS r WHERE r.role_name LIKE ?1 LIMIT ?2 OFFSET ?3", resultClass =
+                RoleDO.class)
+})
 public class RoleDO implements Role {
 
     public static final String GET_ALL = "RoleDO.getAll";
@@ -25,6 +28,8 @@ public class RoleDO implements Role {
     public static final String GET_WITH_TYPE = "RoleDO.getWithType";
 
     public static final String COUNT_ROLES = "RoleDO.countRoles";
+
+    public static final String SEARCH = "RoleDO.search";
 
     @Id
     @GeneratedValue

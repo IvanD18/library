@@ -23,6 +23,12 @@ public class RoleRepoImpl implements RoleRepo {
     }
 
     @Override
+    public List<? extends Role> getAll(String name, int limit, int offset) {
+        return template.txExpr(em -> em.createNamedQuery(RoleDO.SEARCH, RoleDO.class).setParameter(1, name).setParameter(2, limit)
+                .setParameter(3, offset).getResultList());
+    }
+
+    @Override
     public void create(Role role) {
         RoleDO roleToCreate = new RoleDO();
         roleToCreate.setName(role.getName());
