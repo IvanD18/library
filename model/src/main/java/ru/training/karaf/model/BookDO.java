@@ -13,7 +13,6 @@ import java.util.List;
         @NamedQuery(name = BookDO.COUNT_BOOKS, query = "SELECT COUNT(b) FROM BookDO AS b"),
         @NamedQuery(name = BookDO.COUNT_AVAILABLE_BOOKS, query = "SELECT COUNT(b) FROM BookDO AS b where b.availability = 'true'"),
         @NamedQuery(name = BookDO.COUNT_NOT_AVAILABLE_BOOKS, query = "SELECT COUNT(b) FROM BookDO AS b where b.availability = 'false'")
-
 })
 
 @NamedNativeQueries(
@@ -32,7 +31,16 @@ import java.util.List;
                         " where ba.bookdo_id = ?)", resultClass = AuthorDO.class),
                 @NamedNativeQuery(name = BookDO.SEARCH_BY_GENRE,
                         query = "SELECT b.* FROM book as b where b.genre_id in(select g.id from genre as g where g.genre_name LIKE ?1)  limit" +
-                                " ?2 offset ?3", resultClass = BookDO.class)
+                                " ?2 offset ?3", resultClass = BookDO.class),
+                @NamedNativeQuery(name = BookDO.SEARCH, query = BookDO.SEARCH_QUERY +
+                        ""
+                        + BookDO.LIMIT_OFFSET, resultClass = BookDO.class),
+                @NamedNativeQuery(name = BookDO.SEARCH_TITLE_ASC, query = BookDO.SEARCH_QUERY +
+                        " ORDER BY title ASC "
+                        + BookDO.LIMIT_OFFSET, resultClass = BookDO.class),
+                @NamedNativeQuery(name = BookDO.SEARCH_TITLE_DESC, query = BookDO.SEARCH_QUERY +
+                        " ORDER BY title DESC "
+                        + BookDO.LIMIT_OFFSET, resultClass = BookDO.class)
         }
 )
 public class BookDO implements Book {
@@ -48,6 +56,14 @@ public class BookDO implements Book {
     public static final String COUNT_BOOKS = "Book.countBooks";
     public static final String COUNT_NOT_AVAILABLE_BOOKS = "Book.countAvailableBooks";
     public static final String COUNT_AVAILABLE_BOOKS = "Book.countNotAvailableBooks";
+    public static final String SEARCH = "Book.search";
+    public static final String SEARCH_TITLE_ASC = "Book.searchTitleAsc";
+    public static final String SEARCH_TITLE_DESC = "Book.searchTitleDesc";
+
+    public static final String SEARCH_QUERY = " SELECT b.* FROM book AS b WHERE b.title LIKE ?1 AND b.genre_id IN (SELECT id FROM " +
+            "genre AS g WHERE genre_name LIKE ?2) AND b.id IN (SELECT bookdo_id FROM book_author WHERE author_id IN (SELECT id FROM " +
+            "author WHERE author_surname LIKE ?3)) ";
+    public static final String LIMIT_OFFSET = " LIMIT ?4 OFFSET ?5 ";
 
     @Id
     @GeneratedValue

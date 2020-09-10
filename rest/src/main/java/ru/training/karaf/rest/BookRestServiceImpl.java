@@ -37,8 +37,17 @@ public class BookRestServiceImpl implements BookRestService {
     }
 
     @Override
-    public List<BookDTO> getAll() {
-        List<BookDTO> result = repo.getAll().stream().map(b -> new BookDTO(b)).collect(Collectors.toList());
+    public List<BookDTO> getAll(String title, String genre, String surname, int limit, int offset, String sortBy, String order) {
+
+        limit = (limit == 0) ? 10 : limit;
+        offset = offset > 0 ? limit * (offset - 1) : 0;
+        title = title == null ? "%" : title;
+        surname = surname == null ? "%" : surname;
+        genre = genre == null ? "%" : genre;
+        sortBy = sortBy == null ? "" : sortBy;
+        order = order == null ? "" : order;
+        List<BookDTO> result = repo.getAll(title, genre, surname, limit, offset, sortBy, order).stream().map(b -> new BookDTO(b)).collect(
+                Collectors.toList());
         return result;
     }
 

@@ -19,6 +19,8 @@ public interface BookRepo {
 
     List<? extends Book> getAll();
 
+    List<? extends Book> getAll(String title, String genre,String surname, int limit, int offset, String sortBy, String order);
+
     void create(Book book);
 
     void update(Long id, Book book);

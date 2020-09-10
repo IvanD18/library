@@ -1,6 +1,5 @@
 package ru.training.karaf.rest;
 
-
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import ru.training.karaf.rest.dto.BookDTO;
 
@@ -9,15 +8,16 @@ import javax.ws.rs.core.MediaType;
 import java.io.InputStream;
 import java.util.List;
 
-
 @Path("book")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public interface BookRestService {
 
-
     @GET
-    List<BookDTO> getAll();
+    List<BookDTO> getAll(
+            @QueryParam("title") String title, @QueryParam("genre") String genre, @QueryParam("author") String surname, @QueryParam("sz") int limit,
+            @QueryParam("pg") int offset,@QueryParam("sort") String sortBy,@QueryParam("order") String order
+    );
 
     @GET
     @Path("{name}")

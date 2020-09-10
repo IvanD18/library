@@ -101,6 +101,27 @@ public class BookRepoImpl implements BookRepo {
     }
 
     @Override
+    public List<? extends Book> getAll(String title, String genre, String surname, int limit, int offset, String sortBy, String order) {
+        if (sortBy.equals("title") && order.equals("asc")) {
+            return template.txExpr(em -> em.createNamedQuery(BookDO.SEARCH_TITLE_ASC, BookDO.class).setParameter(1, title).setParameter(2, genre)
+                    .setParameter(3, surname)
+                    .setParameter(4, limit).setParameter(5, offset)
+                    .getResultList());
+        }
+        if (sortBy.equals("title") && order.equals("desc")) {
+            return template.txExpr(em -> em.createNamedQuery(BookDO.SEARCH_TITLE_DESC, BookDO.class).setParameter(1, title).setParameter(2, genre)
+                    .setParameter(3, surname)
+                    .setParameter(4, limit).setParameter(5, offset)
+                    .getResultList());
+        } else {
+            return template.txExpr(em -> em.createNamedQuery(BookDO.SEARCH, BookDO.class).setParameter(1, title).setParameter(2, genre).setParameter(
+                    3, surname)
+                    .setParameter(4, limit).setParameter(5, offset)
+                    .getResultList());
+        }
+    }
+
+    @Override
     public void create(Book book) {
         BookDO bookToCreate = new BookDO();
         bookToCreate.setTitle(book.getTitle());
@@ -169,7 +190,7 @@ public class BookRepoImpl implements BookRepo {
 
     @Override
     public Optional<? extends Book> getByTitle(String title) {
-        return  Optional.of(template.txExpr(em -> searchByTitle(title , 1, 0, em)).get(0));
+        return Optional.of(template.txExpr(em -> searchByTitle(title, 1, 0, em)).get(0));
     }
 
     @Override
@@ -199,7 +220,7 @@ public class BookRepoImpl implements BookRepo {
     private List<BookDO> searchByAuthor(String name, String lastName, int limit, int offset, String sort, EntityManager em) {
         try {
             return em.createNamedQuery(BookDO.SEARCH_BY_AUTHOR).setParameter(1, name).setParameter(2, lastName).setParameter(
-                    3, limit).setParameter(4,offset).getResultList();
+                    3, limit).setParameter(4, offset).getResultList();
         } catch (NoResultException e) {
             throw e;
         }

@@ -39,6 +39,8 @@ public class AuthorRestServiceImpl implements AuthorRestService {
         offset = offset>0? limit * (offset - 1): 0;
         name= name ==null? "%":name;
         lastName= lastName ==null? "%":lastName;
+        sortBy = sortBy == null ? "" : sortBy;
+        order = order == null ? "" : order;
         List<AuthorDTO> result = repo.getAll(name, lastName, limit, offset, sortBy, order).stream().map(a -> new AuthorDTO(a)).collect(Collectors.toList());
         return result;
     }
