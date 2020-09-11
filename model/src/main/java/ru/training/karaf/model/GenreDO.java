@@ -11,7 +11,11 @@ import javax.persistence.*;
         @NamedQuery(name = GenreDO.COUNT_GENRES, query = "SELECT COUNT(g) FROM GenreDO AS g")
 })
 @NamedNativeQueries({
-        @NamedNativeQuery(name = GenreDO.SEARCH, query = "SELECT g.* FROM genre AS g WHERE g.genre_name LIKE ?1 LIMIT ?2 OFFSET ?3", resultClass =
+        @NamedNativeQuery(name = GenreDO.SEARCH_ASC, query = "SELECT g.* FROM genre AS g WHERE g.genre_name LIKE ?1 ORDER BY genre_name ASC LIMIT " +
+                " ?2 OFFSET ?3", resultClass =
+                GenreDO.class),
+        @NamedNativeQuery(name = GenreDO.SEARCH_DESC, query = "SELECT g.* FROM genre AS g WHERE g.genre_name LIKE ?1 ORDER BY genre_name DESC " +
+                " LIMIT ?2 OFFSET ?3", resultClass =
                 GenreDO.class)
 })
 public class GenreDO implements Genre {
@@ -26,7 +30,8 @@ public class GenreDO implements Genre {
 
     public static final String COUNT_GENRES = "GenreDO.countGenres";
 
-    public static final String SEARCH = "GenreDO.search";
+    public static final String SEARCH_ASC = "GenreDO.searchAsc";
+    public static final String SEARCH_DESC = "GenreDO.searchDesc";
 
     @Id
     @GeneratedValue

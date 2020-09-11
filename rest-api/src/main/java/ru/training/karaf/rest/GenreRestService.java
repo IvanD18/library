@@ -13,7 +13,11 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public interface GenreRestService {
     @GET
-    List<GenreDTO> getAll(@QueryParam("genre") String name, @QueryParam("sz") int limit, @QueryParam("pg") int offset);
+    List<GenreDTO> getAll(
+            @QueryParam("genre") String name, @QueryParam("sz") int limit, @QueryParam("pg") int offset,
+            @QueryParam("sort") String sortBy,
+            @QueryParam("order") String order
+    );
 
     @POST
     @Path("/create")
