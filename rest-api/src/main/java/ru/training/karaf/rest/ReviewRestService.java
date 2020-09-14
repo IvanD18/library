@@ -13,7 +13,8 @@ public interface ReviewRestService {
     @GET
     List<ReviewDTO> getAll(
             @QueryParam("rating") int rating, @QueryParam("title") String title, @QueryParam("login") String login, @QueryParam("sz") int limit,
-            @QueryParam("pg") int offset, @QueryParam("mode") String mode
+            @QueryParam("pg") int offset, @QueryParam("mode") String mode, @QueryParam("sort") String sort,
+            @QueryParam("order") String order
     );
 
     @POST
