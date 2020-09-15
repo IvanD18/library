@@ -1,6 +1,8 @@
 package ru.training.karaf.rest;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.ws.rs.BadRequestException;
@@ -16,10 +18,8 @@ import ru.training.karaf.model.Book;
 import ru.training.karaf.repo.BookRepo;
 import ru.training.karaf.repo.RoleRepo;
 import ru.training.karaf.repo.UserRepo;
-import ru.training.karaf.rest.dto.BookDTO;
-import ru.training.karaf.rest.dto.LoginfoDTO;
-import ru.training.karaf.rest.dto.RoleDTO;
-import ru.training.karaf.rest.dto.UserDTO;
+import ru.training.karaf.rest.comparator.*;
+import ru.training.karaf.rest.dto.*;
 import ru.training.karaf.rest.exception.NoPermissionsException;
 
 public class UserRestServiceImpl implements UserRestService {
@@ -84,20 +84,64 @@ public class UserRestServiceImpl implements UserRestService {
     //    }
 
     @Override
-    public List<UserDTO> getAll(int age, String ratio, String role, int limit, int offset, String address) throws Exception {
+    public List<UserDTO> getAll(int age, String ratio, String role, int limit, int offset, String address, String sort, String order) throws
+            Exception {
         ratio = (ratio == null) ? "%" : ratio;
         address = (address == null) ? "%" : address;
         limit = (limit == 0) ? 10 : limit;
         offset = offset > 0 ? limit * (offset - 1) : 0;
         role = role == null ? "%" : role;
-
+        sort = sort == null ? "" : sort;
+        order = order == null ? "" : order;
         if (ServiceUtils.isAdmin()) {
             List<UserDTO> result = repo.searchByAge(age, ratio, role, limit, offset, address).stream().map(u -> new UserDTO(u)).collect(
                     Collectors.toList());
+
+            if (sort.equals("age") && order.equals("asc")) {
+                result.sort(Comparator.comparingInt(UserDTO::getAge));
+                return result;
+            }
+            if (sort.equals("age") && order.equals("desc")) {
+                Collections.sort(result, new UserAgeComparator());
+                return result;
+            }
+            if (sort.equals("login") && order.equals("asc")) {
+                Collections.sort(result, new UserLoginAscComparator());
+                return result;
+            }
+            if (sort.equals("login") && order.equals("desc")) {
+                Collections.sort(result, new UserLoginDescComparator());
+                return result;
+            }
+            if (sort.equals("name") && order.equals("asc")) {
+                Collections.sort(result, new UserNameAscComparator());
+                return result;
+            }
+            if (sort.equals("name") && order.equals("desc")) {
+                Collections.sort(result, new UserNameDescComparator());
+                return result;
+            }
+            if (sort.equals("surname") && order.equals("asc")) {
+                Collections.sort(result, new UserSurnameAscComparator());
+                return result;
+            }
+            if (sort.equals("surname") && order.equals("desc")) {
+                Collections.sort(result, new UserSurnameDescComparator());
+                return result;
+            }
+            if (sort.equals("role") && order.equals("asc")) {
+                Collections.sort(result, new UserRoleAscComparator());
+                return result;
+            }
+            if (sort.equals("role") && order.equals("desc")) {
+                Collections.sort(result, new UserRoleDescComparator());
+                return result;
+            }
             return result;
         } else {
             throw new NoPermissionsException(ServiceUtils.viewMessage());
         }
+
     }
 
     @Override

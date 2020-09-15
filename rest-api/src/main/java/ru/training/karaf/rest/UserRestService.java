@@ -22,14 +22,13 @@ public interface UserRestService {
     @Path("/taking/{id}/{book_id}")
     String takeBook(@PathParam("id") Long id, @PathParam("book_id") Long bookId);
 
-//    @GET
-//    List<UserDTO> getAll() throws Exception;
+    //    @GET
+    //    List<UserDTO> getAll() throws Exception;
 
     @GET
     List<UserDTO> getAll(
-            @QueryParam("age") int age, @QueryParam("ratio") String ratio,@QueryParam("role") String role, @QueryParam("sz") int limit, @QueryParam(
-                    "pg") int offset,
-            @QueryParam("address") String address
+            @QueryParam("age") int age, @QueryParam("ratio") String ratio, @QueryParam("role") String role, @QueryParam("sz") int limit,
+            @QueryParam("pg") int offset, @QueryParam("address") String address, @QueryParam("sort") String sort, @QueryParam("order") String order
     ) throws Exception;
 
     //    @GET

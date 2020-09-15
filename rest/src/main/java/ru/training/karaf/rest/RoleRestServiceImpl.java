@@ -32,6 +32,7 @@ public class RoleRestServiceImpl implements RoleRestService {
         name = name == null ? "%" : name;
         limit = (limit == 0) ? 10 : limit;
         offset = offset > 0 ? limit * (offset - 1) : 0;
+        order = order == null ? "" : order;
         List<RoleDTO> result = repo.getAll(name, limit, offset, order).stream().map(r -> new RoleDTO(r)).collect(Collectors.toList());
         return result;
     }
