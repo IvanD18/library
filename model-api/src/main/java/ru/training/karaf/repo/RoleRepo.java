@@ -10,7 +10,7 @@ public interface RoleRepo {
 
     List<? extends Role> getAll();
 
-    List<? extends Role> getAll(String name, int limit, int offset);
+    List<? extends Role> getAll(String name, int limit, int offset, String order);
 
     void create(Role role);
 

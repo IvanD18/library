@@ -13,7 +13,7 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public interface RoleRestService {
     @GET
-    List<RoleDTO> getAll(@QueryParam("role") String name, @QueryParam("sz") int limit, @QueryParam("pg") int offset);
+    List<RoleDTO> getAll(@QueryParam("role") String name, @QueryParam("sz") int limit, @QueryParam("pg") int offset, @QueryParam("order") String order);
 
     @POST
     @Path("/create")

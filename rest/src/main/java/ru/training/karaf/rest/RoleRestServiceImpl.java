@@ -28,11 +28,11 @@ public class RoleRestServiceImpl implements RoleRestService {
     }
 
     @Override
-    public List<RoleDTO> getAll(String name, int limit, int offset) {
+    public List<RoleDTO> getAll(String name, int limit, int offset, String order) {
         name = name == null ? "%" : name;
         limit = (limit == 0) ? 10 : limit;
         offset = offset > 0 ? limit * (offset - 1) : 0;
-        List<RoleDTO> result = repo.getAll(name, limit, offset).stream().map(r -> new RoleDTO(r)).collect(Collectors.toList());
+        List<RoleDTO> result = repo.getAll(name, limit, offset, order).stream().map(r -> new RoleDTO(r)).collect(Collectors.toList());
         return result;
     }
 
