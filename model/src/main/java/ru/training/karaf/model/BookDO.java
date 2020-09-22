@@ -20,18 +20,18 @@ import java.util.List;
                 @NamedNativeQuery(name = BookDO.SEARCH_BY_AUTHOR,
                         query = "SELECT b.* FROM book as b where b.id in (select bookdo_id from book_author where author_id in(select a.id from " +
                                 "author " +
-                                "  as a where a.author_name LIKE ?1 and a.author_surname " +
-                                "  LIKE ?2 order by a.author_surname ASC))  limit ?3 offset ?4", resultClass = BookDO.class),
+                                "  as a where a.author_name LIKE #name and a.author_surname " +
+                                "  LIKE #surname order by a.author_surname ASC))  limit #limit offset #offset", resultClass = BookDO.class),
 
-                @NamedNativeQuery(name = BookDO.SEARCH_BY_TITLE, query = "SELECT b.* FROM book AS b WHERE b.title LIKE ?1 limit ?2 offset " +
-                        "?3", resultClass = BookDO.class),
+                @NamedNativeQuery(name = BookDO.SEARCH_BY_TITLE, query = "SELECT b.* FROM book AS b WHERE b.title LIKE #title limit #limit offset " +
+                        "#offset", resultClass = BookDO.class),
                 @NamedNativeQuery(name = BookDO.GET_AUTHORS, query = "select a.* from author as a where a.id in (select ba.author_id from " +
                         "book_author" +
                         " as ba  " +
-                        " where ba.bookdo_id = ?)", resultClass = AuthorDO.class),
+                        " where ba.bookdo_id = #id)", resultClass = AuthorDO.class),
                 @NamedNativeQuery(name = BookDO.SEARCH_BY_GENRE,
-                        query = "SELECT b.* FROM book as b where b.genre_id in(select g.id from genre as g where g.genre_name LIKE ?1)  limit" +
-                                " ?2 offset ?3", resultClass = BookDO.class),
+                        query = "SELECT b.* FROM book as b where b.genre_id in(select g.id from genre as g where g.genre_name LIKE #genre)  limit" +
+                                " #limit offset #offset", resultClass = BookDO.class),
                 @NamedNativeQuery(name = BookDO.SEARCH, query = BookDO.SEARCH_QUERY +
                         ""
                         + BookDO.LIMIT_OFFSET, resultClass = BookDO.class),
@@ -60,10 +60,10 @@ public class BookDO implements Book {
     public static final String SEARCH_TITLE_ASC = "Book.searchTitleAsc";
     public static final String SEARCH_TITLE_DESC = "Book.searchTitleDesc";
 
-    public static final String SEARCH_QUERY = " SELECT b.* FROM book AS b WHERE b.title LIKE ?1 AND b.genre_id IN (SELECT id FROM " +
-            "genre AS g WHERE genre_name LIKE ?2) AND b.id IN (SELECT bookdo_id FROM book_author WHERE author_id IN (SELECT id FROM " +
-            "author WHERE author_surname LIKE ?3)) ";
-    public static final String LIMIT_OFFSET = " LIMIT ?4 OFFSET ?5 ";
+    public static final String SEARCH_QUERY = " SELECT b.* FROM book AS b WHERE b.title LIKE #title AND b.genre_id IN (SELECT id FROM " +
+            "genre AS g WHERE genre_name LIKE #genre) AND b.id IN (SELECT bookdo_id FROM book_author WHERE author_id IN (SELECT id FROM " +
+            "author WHERE author_surname LIKE #surname)) ";
+    public static final String LIMIT_OFFSET = " LIMIT #limit OFFSET #offset ";
 
     @Id
     @GeneratedValue
@@ -125,14 +125,6 @@ public class BookDO implements Book {
         this.availability = availability;
     }
 
-    //    public void setReview(List<ReviewDO> review) {
-    //        this.review = review;
-    //    }
-
-    //    public void setUser(UserDO user) {
-    //        this.user = user;
-    //    }
-
     @Override
     public Long getId() {
         return id;
@@ -157,7 +149,5 @@ public class BookDO implements Book {
         return availability;
     }
 
-    //    public List<ReviewDO> getReview() {
-    //        return review;
-    //    }
+
 }

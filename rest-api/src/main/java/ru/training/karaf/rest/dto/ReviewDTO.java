@@ -39,6 +39,7 @@ public class ReviewDTO implements Review {
         return rating;
     }
 
+    @Override
     public String getSurname(){
         return getUser().getLastName();
     }

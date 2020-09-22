@@ -25,15 +25,15 @@ public class RoleRepoImpl implements RoleRepo {
     @Override
     public List<? extends Role> getAll(String name, int limit, int offset, String order) {
         if (order.equals("asc")) {
-            return template.txExpr(em -> em.createNamedQuery(RoleDO.SEARCH_ASC, RoleDO.class).setParameter(1, name).setParameter(2, limit)
-                    .setParameter(3, offset).getResultList());
+            return template.txExpr(em -> em.createNamedQuery(RoleDO.SEARCH_ASC, RoleDO.class).setParameter("role", name).setParameter("limit", limit)
+                    .setParameter("offset", offset).getResultList());
         }
         if (order.equals("desc")) {
-            return template.txExpr(em -> em.createNamedQuery(RoleDO.SEARCH_DESC, RoleDO.class).setParameter(1, name).setParameter(2, limit)
-                    .setParameter(3, offset).getResultList());
+            return template.txExpr(em -> em.createNamedQuery(RoleDO.SEARCH_DESC, RoleDO.class).setParameter("role", name).setParameter("limit", limit)
+                    .setParameter("offset", offset).getResultList());
         }
-        return template.txExpr(em -> em.createNamedQuery(RoleDO.SEARCH, RoleDO.class).setParameter(1, name).setParameter(2, limit)
-                .setParameter(3, offset).getResultList());
+        return template.txExpr(em -> em.createNamedQuery(RoleDO.SEARCH, RoleDO.class).setParameter("role", name).setParameter("limit", limit)
+                .setParameter("offset", offset).getResultList());
     }
 
     @Override

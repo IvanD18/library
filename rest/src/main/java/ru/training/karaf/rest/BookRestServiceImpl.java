@@ -46,7 +46,7 @@ public class BookRestServiceImpl implements BookRestService {
         genre = genre == null ? "%" : genre;
         sortBy = sortBy == null ? "" : sortBy;
         order = order == null ? "" : order;
-        List<BookDTO> result = repo.getAll(title, genre, surname, limit, offset, sortBy, order).stream().map(b -> new BookDTO(b)).collect(
+        List<BookDTO> result = repo.getAll(title, genre, surname, limit, offset, sortBy, order).stream().map(BookDTO::new).collect(
                 Collectors.toList());
         return result;
     }
@@ -54,10 +54,10 @@ public class BookRestServiceImpl implements BookRestService {
     @Override
     public List<BookDTO> getAll(String name, int sz, int pg) {
         int offset = 0;
-        if (pg > 0 & sz >= 0) {
+        if (pg > 0 & sz > 0) {
             offset = sz * (pg - 1);
         }
-        List<BookDTO> result = repo.searchByGenre(name, sz, offset).stream().map(b -> new BookDTO(b)).collect(Collectors.toList());
+        List<BookDTO> result = repo.searchByGenre(name, sz, offset).stream().map(BookDTO::new).collect(Collectors.toList());
         return result;
     }
 

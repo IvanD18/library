@@ -14,13 +14,13 @@ import java.util.List;
 
 })
 @NamedNativeQueries({
-        @NamedNativeQuery(name = RoleDO.SEARCH, query = "SELECT r.* FROM role AS r WHERE r.role_name LIKE ?1 LIMIT ?2 OFFSET ?3", resultClass =
+        @NamedNativeQuery(name = RoleDO.SEARCH, query = "SELECT r.* FROM role AS r WHERE r.role_name LIKE #role LIMIT #limit OFFSET #offset", resultClass =
                 RoleDO.class),
-         @NamedNativeQuery(name = RoleDO.SEARCH_ASC, query = "SELECT r.* FROM role AS r WHERE r.role_name LIKE ?1 ORDER BY role_name ASC LIMIT ?2 " +
-                 " OFFSET ?3", resultClass =
+         @NamedNativeQuery(name = RoleDO.SEARCH_ASC, query = "SELECT r.* FROM role AS r WHERE r.role_name LIKE #role ORDER BY role_name ASC LIMIT #limit " +
+                 " OFFSET #offset", resultClass =
                 RoleDO.class),
-         @NamedNativeQuery(name = RoleDO.SEARCH_DESC, query = "SELECT r.* FROM role AS r WHERE r.role_name LIKE ?1 ORDER BY role_name DESC LIMIT ?2" +
-                 " OFFSET ?3", resultClass =
+         @NamedNativeQuery(name = RoleDO.SEARCH_DESC, query = "SELECT r.* FROM role AS r WHERE r.role_name LIKE #role ORDER BY role_name DESC LIMIT" +
+                 " #limit OFFSET #offset", resultClass =
                 RoleDO.class)
 
 })

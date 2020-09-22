@@ -7,6 +7,8 @@ public interface Review {
 
     int getRating();
 
+    String getSurname();
+
     User getUser();
 
     Book getBook();

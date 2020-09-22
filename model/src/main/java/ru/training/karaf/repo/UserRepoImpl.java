@@ -105,9 +105,9 @@ public class UserRepoImpl implements UserRepo {
 
         if (ratio.equals("less")) {
             try {
-                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE_LESS).setParameter(1, age).setParameter(2, address).setParameter(3, role)
-                        .setParameter(4, limit)
-                        .setParameter(5, offset)
+                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE_LESS).setParameter("age", age).setParameter("address", address).setParameter("role", role)
+                        .setParameter("limit", limit)
+                        .setParameter("offset", offset)
                         .getResultList();
             } catch (NoResultException e) {
                 throw e;
@@ -115,18 +115,18 @@ public class UserRepoImpl implements UserRepo {
         }
         if (ratio.equals("equally")) {
             try {
-                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE).setParameter(1, age).setParameter(2, address).setParameter(3, role)
-                        .setParameter(4, limit)
-                        .setParameter(5, offset)
+                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE).setParameter("age", age).setParameter("address", address).setParameter("role", role)
+                        .setParameter("limit", limit)
+                        .setParameter("offset", offset)
                         .getResultList();
             } catch (NoResultException e) {
                 throw e;
             }
         } else {
             try {
-                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE_MORE).setParameter(1, age).setParameter(2, address).setParameter(3, role)
-                        .setParameter(4, limit)
-                        .setParameter(5, offset)
+                return em.createNamedQuery(UserDO.SEARCH_WITH_AGE_MORE).setParameter("age", age).setParameter("address", address).setParameter("role", role)
+                        .setParameter("limit", limit)
+                        .setParameter("offset", offset)
                         .getResultList();
             } catch (NoResultException e) {
                 throw e;
@@ -141,7 +141,7 @@ public class UserRepoImpl implements UserRepo {
 
     public List<? extends User> searchByAddress(String address, int limit, int offset, EntityManager em) {
         try {
-            return em.createNamedQuery(UserDO.SEARCH_BY_ADDRESS).setParameter(1, address).setParameter(2, limit).setParameter(3, offset)
+            return em.createNamedQuery(UserDO.SEARCH_BY_ADDRESS).setParameter("address", address).setParameter("limit", limit).setParameter("offset", offset)
                     .getResultList();
         } catch (NoResultException e) {
             throw e;
@@ -175,7 +175,7 @@ public class UserRepoImpl implements UserRepo {
 
     private List<Long> getBooks(Long id, EntityManager em) {
         try {
-            return em.createNamedQuery(UserDO.GET_BOOKS, Long.class).setParameter(1, id).getResultList();
+            return em.createNamedQuery(UserDO.GET_BOOKS, Long.class).setParameter("id", id).getResultList();
         } catch (NoResultException e) {
             return Collections.emptyList();
         }
@@ -183,7 +183,7 @@ public class UserRepoImpl implements UserRepo {
 
     private long getRole(Long id, EntityManager em) {
         try {
-            return em.createNamedQuery(UserDO.GET_ROLES, Long.class).setParameter(1, id).getResultList().get(0);
+            return em.createNamedQuery(UserDO.GET_ROLES, Long.class).setParameter("id", id).getResultList().get(0);
         } catch (NoResultException e) {
             return Long.MIN_VALUE;
         }

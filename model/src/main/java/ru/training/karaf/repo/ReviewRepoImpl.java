@@ -23,19 +23,22 @@ public class ReviewRepoImpl implements ReviewRepo {
 
     @Override
     public List<? extends Review> getAll(int rating, String title, String login, int limit, int offset, String mode) {
-        if(mode == "equally"){
-        return template.txExpr(em -> em.createNamedQuery(ReviewDO.SEARCH_WITH_EQUAL_RATING, ReviewDO.class).setParameter(1, rating).setParameter(2,
-                title)
-                .setParameter(3, login).setParameter(4, limit).setParameter(5, offset).getResultList());}
-        if(mode == "less"){
-            return template.txExpr(em -> em.createNamedQuery(ReviewDO.SEARCH_WITH_LESS_RATING, ReviewDO.class).setParameter(1, rating).setParameter(2,
-                    title)
-                    .setParameter(3, login).setParameter(4, limit).setParameter(5, offset).getResultList());
+        if (mode.equalsIgnoreCase("equally")) {
+            return template.txExpr(em -> em.createNamedQuery(ReviewDO.SEARCH_WITH_EQUAL_RATING, ReviewDO.class).setParameter("rating", rating)
+                    .setParameter("title",
+                            title)
+                    .setParameter("login", login).setParameter("limit", limit).setParameter("offset", offset).getResultList());
         }
-        else{
-            return template.txExpr(em -> em.createNamedQuery(ReviewDO.SEARCH_WITH_MORE_RATING, ReviewDO.class).setParameter(1, rating).setParameter(2,
-                    title)
-                    .setParameter(3, login).setParameter(4, limit).setParameter(5, offset).getResultList());
+        if (mode.equalsIgnoreCase("less")) {
+            return template.txExpr(em -> em.createNamedQuery(ReviewDO.SEARCH_WITH_LESS_RATING, ReviewDO.class).setParameter("rating", rating)
+                    .setParameter("title",
+                            title)
+                    .setParameter("login", login).setParameter("limit", limit).setParameter("offset", offset).getResultList());
+        } else {
+            return template.txExpr(em -> em.createNamedQuery(ReviewDO.SEARCH_WITH_MORE_RATING, ReviewDO.class).setParameter("rating", rating)
+                    .setParameter("title",
+                            title)
+                    .setParameter("login", login).setParameter("limit", limit).setParameter("offset", offset).getResultList());
         }
     }
 

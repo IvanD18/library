@@ -47,8 +47,8 @@ public class AuthorDO implements Author {
     public static final String SEARCH_BY_LASTNAME_ASC = "Author.searchLastnameAsc";
     public static final String SEARCH_BY_LASTNAME_DESC = "Author.searchLastnameDesc";
 
-    public static final String SEARCH_QUERY = " SELECT a.* FROM author AS a WHERE a.author_name LIKE ?1 AND a.author_surname LIKE ?2 ";
-    public static final String LIMIT_OFFSET = " LIMIT ?3 OFFSET ?4 ";
+    public static final String SEARCH_QUERY = " SELECT a.* FROM author AS a WHERE a.author_name LIKE #name AND a.author_surname LIKE #surname ";
+    public static final String LIMIT_OFFSET = " LIMIT #limit OFFSET #offset ";
 
     @Id
     @GeneratedValue

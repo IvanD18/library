@@ -11,11 +11,12 @@ import javax.persistence.*;
         @NamedQuery(name = GenreDO.COUNT_GENRES, query = "SELECT COUNT(g) FROM GenreDO AS g")
 })
 @NamedNativeQueries({
-        @NamedNativeQuery(name = GenreDO.SEARCH_ASC, query = "SELECT g.* FROM genre AS g WHERE g.genre_name LIKE ?1 ORDER BY genre_name ASC LIMIT " +
-                " ?2 OFFSET ?3", resultClass =
+        @NamedNativeQuery(name = GenreDO.SEARCH_ASC, query = "SELECT g.* FROM genre AS g WHERE g.genre_name LIKE #genre ORDER BY genre_name ASC " +
+                "LIMIT " +
+                " #limit OFFSET #offset", resultClass =
                 GenreDO.class),
-        @NamedNativeQuery(name = GenreDO.SEARCH_DESC, query = "SELECT g.* FROM genre AS g WHERE g.genre_name LIKE ?1 ORDER BY genre_name DESC " +
-                " LIMIT ?2 OFFSET ?3", resultClass =
+        @NamedNativeQuery(name = GenreDO.SEARCH_DESC, query = "SELECT g.* FROM genre AS g WHERE g.genre_name LIKE #genre ORDER BY genre_name DESC " +
+                " LIMIT #limit OFFSET #offset", resultClass =
                 GenreDO.class)
 })
 public class GenreDO implements Genre {

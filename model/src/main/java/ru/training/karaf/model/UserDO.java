@@ -14,30 +14,35 @@ import javax.persistence.*;
         @NamedQuery(name = UserDO.COUNT_USERS, query = "SELECT COUNT(u) FROM UserDO AS u"),
 })
 @NamedNativeQueries({
-        @NamedNativeQuery(name = UserDO.DELETE_BOOK, query = "DELETE FROM users_book WHERE userdo_id = :id AND book_id = :book_id"),
-        @NamedNativeQuery(name = UserDO.COUNT_BOOKS, query = "Select count(*) from users_book where userdo_id = ?"),
+        @NamedNativeQuery(name = UserDO.DELETE_BOOK, query = "DELETE FROM users_book WHERE userdo_id = #id AND book_id = #book_id"),
+        @NamedNativeQuery(name = UserDO.COUNT_BOOKS, query = "Select count(*) from users_book where userdo_id = #id"),
         @NamedNativeQuery(name = UserDO.GET_ROLES, query = "select r.id from role as r where r.id in (select u.role_id from " +
-                "users as u where u.id = ?)"),
+                "users as u where u.id = #id)"),
         @NamedNativeQuery(name = UserDO.GET_BOOKS, query = "select b.id from book as b where b.id in (select ub.book_id from " +
-                "users_book as ub where userdo_id = ?)"),
-        @NamedNativeQuery(name = UserDO.SEARCH_BY_ADDRESS, query = "SELECT u.* FROM users AS u WHERE u.address LIKE ?1 limit ?2 offset " +
-                "?3", resultClass = UserDO.class),
-        @NamedNativeQuery(name = UserDO.COUNT_USERS_WITH_AGE, query = "SELECT count(u.*) FROM users AS u WHERE u.age > ?1 and u.address LIKE ?4 " +
-                "limit ?2 " +
-                "offset ?3",
+                "users_book as ub where userdo_id = #id)"),
+        @NamedNativeQuery(name = UserDO.SEARCH_BY_ADDRESS, query = "SELECT u.* FROM users AS u WHERE u.address LIKE #address limit #limit offset " +
+                " #offset", resultClass = UserDO.class),
+        @NamedNativeQuery(name = UserDO.COUNT_USERS_WITH_AGE, query = "SELECT count(u.*) FROM users AS u WHERE u.age > #age and u.address LIKE " +
+                "#address " +
+                "limit #limit " +
+                "offset #offset",
                 resultClass
                         = UserDO.class),
         @NamedNativeQuery(name = UserDO.SEARCH_WITH_AGE_MORE,
-                query = "SELECT u.* FROM users AS u WHERE u.age > ?1 and u.address LIKE ?2 AND u.role_id in (SELECT r.id FROM role as r WHERE r" +
-                        ".role_name LIKE ?3) limit ?4 offset ?5",
+                query = "SELECT u.* FROM users AS u WHERE u.age > #age and u.address LIKE #address AND u.role_id in (SELECT r.id FROM role as r " +
+                        "WHERE" +
+                        " r" +
+                        ".role_name LIKE #role) limit #limit offset #offset",
                 resultClass = UserDO.class),
         @NamedNativeQuery(name = UserDO.SEARCH_WITH_AGE_LESS,
-                query = "SELECT u.* FROM users AS u WHERE u.age < ?1 and u.address LIKE ?2 AND u.role_id in (SELECT r.id FROM role as r WHERE r" +
-                        ".role_name LIKE ?3) limit ?4 offset ?5",
+                query = "SELECT u.* FROM users AS u WHERE u.age < #age and u.address LIKE #address AND u.role_id in (SELECT r.id FROM role as r " +
+                        "WHERE r" +
+                        ".role_name LIKE #role) limit #limit offset #offset",
                 resultClass = UserDO.class),
         @NamedNativeQuery(name = UserDO.SEARCH_WITH_AGE,
-                query = "SELECT u.* FROM users AS u WHERE u.age = ?1 AND u.address LIKE ?2 AND u.role_id in (SELECT r.id FROM role as r WHERE " +
-                        "r.role_name LIKE ?3) limit ?4 offset ?5",
+                query = "SELECT u.* FROM users AS u WHERE u.age = #age AND u.address LIKE #address AND u.role_id in (SELECT r.id FROM role as r " +
+                        "WHERE " +
+                        "r.role_name LIKE #role) limit #limit offset #offset",
                 resultClass = UserDO.class)
 })
 public class UserDO implements User {
@@ -97,12 +102,6 @@ public class UserDO implements User {
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-        //        List<? extends Book> list= user.getBook();
-        //        List<BookDO> result=new ArrayList<>();
-        //        for (Book book1 : list) {
-        //            result.add(new BookDO(book1));
-        //        }
-        //        this.book= result;
     }
 
     public UserDO() {

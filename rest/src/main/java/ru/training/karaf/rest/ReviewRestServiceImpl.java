@@ -46,11 +46,11 @@ public class ReviewRestServiceImpl implements ReviewRestService {
             return result;
         }
         if (sort.equals("surname") && order.equals("asc")) {
-            Collections.sort(result, new ReviewSurnameAscComparator());
+            result.sort(Comparator.comparing(ReviewDTO::getSurname));
             return result;
         }
         if (sort.equals("surname") && order.equals("desc")) {
-            Collections.sort(result, new ReviewSurnameDescComparator());
+            result.sort(new ReviewSurnameDescComparator());
             return result;
         }
         if (sort.equals("title") && order.equals("desc")) {

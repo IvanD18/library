@@ -25,11 +25,14 @@ public class GenreRepoImpl implements GenreRepo {
 
     @Override
     public List<? extends Genre> getAll(String name, int limit, int offset, String sortBy, String order) {
-        if (order.equals("desc")) {
-            return template.txExpr(em -> em.createNamedQuery(GenreDO.SEARCH_DESC).setParameter(1, name).setParameter(2, limit).setParameter(3, offset)
+        if (order.equalsIgnoreCase("desc")) {
+            return template.txExpr(em -> em.createNamedQuery(GenreDO.SEARCH_DESC).setParameter("genre", name).setParameter("limit", limit)
+                    .setParameter("offset",
+                            offset)
                     .getResultList());
         } else {
-            return template.txExpr(em -> em.createNamedQuery(GenreDO.SEARCH_ASC).setParameter(1, name).setParameter(2, limit).setParameter(3, offset)
+            return template.txExpr(em -> em.createNamedQuery(GenreDO.SEARCH_ASC).setParameter("genre", name).setParameter("limit", limit)
+                    .setParameter("offset", offset)
                     .getResultList());
         }
     }

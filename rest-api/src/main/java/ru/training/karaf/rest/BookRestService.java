@@ -15,8 +15,9 @@ public interface BookRestService {
 
     @GET
     List<BookDTO> getAll(
-            @QueryParam("title") String title, @QueryParam("genre") String genre, @QueryParam("author") String surname, @QueryParam("sz") int limit,
-            @QueryParam("pg") int offset,@QueryParam("sort") String sortBy,@QueryParam("order") String order
+            @QueryParam("title")@DefaultValue("%") String title, @QueryParam("genre") String genre, @QueryParam("author") String surname,
+            @QueryParam("sz") int limit,
+            @QueryParam("pg") int offset,@QueryParam("sortBy") String sortBy,@QueryParam("sortOrder") String order
     );
 
     @GET
@@ -28,7 +29,6 @@ public interface BookRestService {
     void create(BookDTO book);
 
     @POST
-    @Produces(MediaType.MULTIPART_FORM_DATA)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/image/adding")
     void addCover(@Multipart("image") InputStream stream, @QueryParam("id") Long id);

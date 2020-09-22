@@ -13,14 +13,20 @@ import javax.xml.namespace.QName;
 })
 @NamedNativeQueries({
         @NamedNativeQuery(name = ReviewDO.SEARCH_WITH_MORE_RATING,
-                query = "SELECT r.* FROM review AS r WHERE r.book_rating > ?1 AND r.book_id IN (SELECT b.id FROM book AS b WHERE b.title LIKE ?2) " +
-                        "AND r.user_id IN (SELECT u.id FROM users AS u WHERE u.login LIKE ?3) LIMIT ?4 OFFSET ?5", resultClass = ReviewDO.class),
+                query = "SELECT r.* FROM review AS r WHERE r.book_rating > #rating AND r.book_id IN (SELECT b.id FROM book AS b WHERE b.title LIKE " +
+                        " #title) " +
+                        "AND r.user_id IN (SELECT u.id FROM users AS u WHERE u.login LIKE #login) LIMIT #limit OFFSET #offset", resultClass =
+                ReviewDO.class),
         @NamedNativeQuery(name = ReviewDO.SEARCH_WITH_LESS_RATING,
-                query = "SELECT r.* FROM review AS r WHERE r.book_rating < ?1 AND r.book_id IN (SELECT b.id FROM book AS b WHERE b.title LIKE ?2) " +
-                        "AND r.user_id IN (SELECT u.id FROM users AS u WHERE u.login LIKE ?3) LIMIT ?4 OFFSET ?5", resultClass = ReviewDO.class),
+                query = "SELECT r.* FROM review AS r WHERE r.book_rating < #rating AND r.book_id IN (SELECT b.id FROM book AS b WHERE b.title LIKE " +
+                        " #title) " +
+                        "AND r.user_id IN (SELECT u.id FROM users AS u WHERE u.login LIKE #login) LIMIT #limit OFFSET #offset",
+                resultClass = ReviewDO.class),
         @NamedNativeQuery(name = ReviewDO.SEARCH_WITH_EQUAL_RATING,
-                query = "SELECT r.* FROM review AS r WHERE r.book_rating = ?1 AND r.book_id IN (SELECT b.id FROM book AS b WHERE b.title LIKE ?2) " +
-                        "OR r.user_id IN (SELECT u.id FROM users AS u WHERE u.login LIKE ?3) LIMIT ?4 OFFSET ?5", resultClass = ReviewDO.class)
+                query = "SELECT r.* FROM review AS r WHERE r.book_rating = #rating AND r.book_id IN (SELECT b.id FROM book AS b WHERE b.title LIKE " +
+                        " #title) " +
+                        "OR r.user_id IN (SELECT u.id FROM users AS u WHERE u.login LIKE #login) LIMIT #limit OFFSET #offset",
+                resultClass = ReviewDO.class)
 })
 
 public class ReviewDO implements Review {
@@ -55,6 +61,11 @@ public class ReviewDO implements Review {
     @Override
     public int getRating() {
         return rating;
+    }
+
+    @Override
+    public String getSurname() {
+        return null;
     }
 
     @Override

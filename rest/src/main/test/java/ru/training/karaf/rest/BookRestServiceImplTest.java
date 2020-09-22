@@ -1,23 +1,20 @@
 package ru.training.karaf.rest;
 
+import junit.framework.TestCase;
 import org.junit.Test;
 import org.mockito.Mockito;
-import ru.training.karaf.model.Book;
 import ru.training.karaf.repo.AuthorRepo;
 import ru.training.karaf.repo.BookRepo;
 import ru.training.karaf.repo.GenreRepo;
 import ru.training.karaf.repo.ReviewRepo;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-public class BookRestServiceImplTest {
-
-
-
+public class BookRestServiceImplTest extends TestCase {
     @Test
     public void showCommentsEmptyList() {
         long id=6;

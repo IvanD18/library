@@ -23,10 +23,6 @@ public class BookRepoImpl implements BookRepo {
     private JpaTemplate template;
     private DataSource datasource;
 
-    static final String URL = "jdbc:postgresql://localhost:5432/postgres";
-    static final String USER = "postgres";
-    static final String PASS = "admin";
-
     public BookRepoImpl(JpaTemplate template, DataSource datasource) {
         this.template = template;
         this.datasource = datasource;
@@ -102,21 +98,24 @@ public class BookRepoImpl implements BookRepo {
 
     @Override
     public List<? extends Book> getAll(String title, String genre, String surname, int limit, int offset, String sortBy, String order) {
-        if (sortBy.equals("title") && order.equals("asc")) {
-            return template.txExpr(em -> em.createNamedQuery(BookDO.SEARCH_TITLE_ASC, BookDO.class).setParameter(1, title).setParameter(2, genre)
-                    .setParameter(3, surname)
-                    .setParameter(4, limit).setParameter(5, offset)
+        if (sortBy.equalsIgnoreCase("title") && order.equalsIgnoreCase("asc")) {
+            return template.txExpr(em -> em.createNamedQuery(BookDO.SEARCH_TITLE_ASC, BookDO.class).setParameter("title", title).setParameter("genre",
+                    genre)
+                    .setParameter("surname", surname)
+                    .setParameter("limit", limit).setParameter("offset", offset)
                     .getResultList());
         }
-        if (sortBy.equals("title") && order.equals("desc")) {
-            return template.txExpr(em -> em.createNamedQuery(BookDO.SEARCH_TITLE_DESC, BookDO.class).setParameter(1, title).setParameter(2, genre)
-                    .setParameter(3, surname)
-                    .setParameter(4, limit).setParameter(5, offset)
+        if (sortBy.equalsIgnoreCase("title") && order.equalsIgnoreCase("desc")) {
+            return template.txExpr(em -> em.createNamedQuery(BookDO.SEARCH_TITLE_DESC, BookDO.class).setParameter(1, title).setParameter("genre",
+                    genre)
+                    .setParameter("surname", surname)
+                    .setParameter("limit", limit).setParameter("offset", offset)
                     .getResultList());
         } else {
-            return template.txExpr(em -> em.createNamedQuery(BookDO.SEARCH, BookDO.class).setParameter(1, title).setParameter(2, genre).setParameter(
-                    3, surname)
-                    .setParameter(4, limit).setParameter(5, offset)
+            return template.txExpr(em -> em.createNamedQuery(BookDO.SEARCH, BookDO.class).setParameter("title", title).setParameter("genre", genre)
+                    .setParameter(
+                            "surname", surname)
+                    .setParameter("limit", limit).setParameter("offset", offset)
                     .getResultList());
         }
     }

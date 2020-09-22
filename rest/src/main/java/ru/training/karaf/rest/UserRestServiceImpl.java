@@ -101,7 +101,7 @@ public class UserRestServiceImpl implements UserRestService {
                 result.sort(Comparator.comparingInt(UserDTO::getAge));
                 return result;
             }
-            if (sort.equals("age") && order.equals("desc")) {
+            if (sort.equalsIgnoreCase("age") && order.equals("desc")) {
                 Collections.sort(result, new UserAgeComparator());
                 return result;
             }
